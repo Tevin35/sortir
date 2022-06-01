@@ -3,18 +3,34 @@
 namespace App\DataFixtures;
 
 use App\Entity\Campus;
+use App\Entity\City;
 use App\Entity\Participant;
+use App\Entity\Place;
+use App\Entity\State;
+use App\Entity\Trip;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
+use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Constraints\Length;
 
 class AppFixtures extends Fixture
 {
 
-    private $encoder;
-    private $faker;
+    private UserPasswordHasherInterface $encoder;
+    private Generator $faker;
     private ObjectManager $manager;
+    const DEFAULT_CAMPUS = ['Niort', 'Rennes', 'Quimper', 'Nantes'];
+    const DEFAULT_STATE = [
+        'CREA' => 'en création',
+        'OPEN' => 'ouverte',
+        'FENC' => 'clôturée',
+        'PROG' => 'en cours',
+        'CLOS' => 'terminée',
+        'HIST' => 'historisée',
+        'CANC' => 'annulée'
+    ];
 
 
     public function __construct(UserPasswordHasherInterface $encoder)
@@ -28,60 +44,87 @@ class AppFixtures extends Fixture
 
         $this->manager = $manager;
 
-        $this->addCampus($manager);
-        $this->addParticipant($manager);
+        $this->addCampus();
+        $this->addParticipant();
+        $this->addState();
+        $this->addTrip();
 
     }
 
-    private function addCampus(ObjectManager $manager)
+    private function addCampus()
     {
-        $campus1 = new Campus();
-        $campus1->setName('Niort');
-        $manager->persist($campus1);
 
-        $campus2 = new Campus();
-        $campus2->setName('Rennes');
-        $manager->persist($campus2);
+        foreach (self::DEFAULT_CAMPUS as $campusName) {
+            $campus = new Campus();
+            $campus->setName($campusName);
+            $this->manager->persist($campus);
+        }
 
-        $campus3 = new Campus();
-        $campus3->setName('Nantes');
-        $manager->persist($campus3);
-
-        $campus4 = new Campus();
-        $campus4->setName('Quimper');
-        $manager->persist($campus4);
-
-        $manager->flush();
+        $this->manager->flush();
     }
 
-    private function addParticipant(ObjectManager $manager)
-    {
-        $participant = new Participant();
 
-        $campus = $this->manager->getRepository(Campus::class)->FindAll();
-        $participant
-            ->setPseudo($this->faker->userName())
-            ->setLastName($this->faker->lastName())
-            ->setFirstName($this->faker->firstName())
-            ->setPhone($this->faker->phoneNumber())
-            ->setEmail($this->faker->email)
-            ->setRoles(['ROLE_USER'])
+    private function addParticipant()
+    {
+        for ($i = 1; $i <= 10; $i++) {
+            $participant = new Participant();
+
+            $campus = $this->manager->getRepository(Campus::class)->findAll();
+
+            $participant
+                ->setPseudo($this->faker->userName())
+                ->setLastName($this->faker->lastName())
+                ->setFirstName($this->faker->firstName())
+                ->setPhone($this->faker->phoneNumber())
+                ->setEmail($this->faker->email)
+                ->setRoles(['ROLE_USER'])
+                ->setCampus($this->faker->randomElement($campus))
+                ->setActive(true);
+            $password = $this->encoder->hashPassword($participant, 'password');
+            $participant->setPassword($password);
+            $this->manager->persist($participant);
+
+        }
+        $this->manager->flush();
+    }
+
+    private function addState()
+    {
+
+        foreach (self::DEFAULT_STATE as $code =>$worded) {
+            $state = new State();
+            $state->setWorded($worded);
+            $state->setStateCode($code);
+            $this->manager->persist($state);
+        }
+
+        $this->manager->flush();
+
+    }
+
+    private function addTrip()
+    {
+        $activities = ['babyfoot', 'patinoire', 'cinéma', 'fête forraine', 'randonée', 'bar'];
+        $randomNumber = mt_rand( 20, 90);
+        $campus = $this->manager->getRepository(Campus::class)->findAll();
+        $states = $this->manager->getRepository(State::class)->findAll();
+        $place = new Place();
+        $city = new City();
+
+        $trip = new Trip();
+        $trip->setName($this->faker->randomElement($activities))
             ->setCampus($this->faker->randomElement($campus))
-            ->setActive(true);
-        $password = $this->encoder->hashPassword($participant, 'password');
-        $participant->setPassword($password);
-        $manager->persist($participant);
-        $manager->flush();
+            ->setDateStartHour($this->faker->dateTime)
+            ->setDuration($randomNumber)
+            ->setDateLimitRegistration($this->faker->dateTime)
+            ->setNbMaxRegistration($randomNumber)
+            ->setTripDescription($this->faker->text(20))
+            ->setPlace('Rennes')
+            ->getPlace()->setCity('France')
+            ->setState($this->faker->randomElement($states));
+
+        $this->manager->persist($trip);
+        $this->manager->flush();
     }
-
-
-
-
-
-
-
-
-
-
 
 }
