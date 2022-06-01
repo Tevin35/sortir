@@ -1,5 +1,9 @@
 {% extends 'base.html.twig' %}
 
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('css/profile/profile.css') }}">
+    {% endblock %}
+
 {% block title %}Participant{% endblock %}
 
 {% block body %}
@@ -30,9 +34,18 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_participant_index') }}">back to list</a>
+    <button class="rectangular"><a href="{{ path('app_participant_index') }}">Retour</a></button>
+    <br>
 
+    {#
+        button edit participant : idéalement disparaître en tant que utilisateur, apparaître en admin.
     <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
 
+    #}
+{#
+    bouton delete participant : idéalement disparaître en tant que utilisateur, apparaître en admin.
+
     {{ include('participant/_delete_form.html.twig') }}
+#}
+
 {% endblock %}

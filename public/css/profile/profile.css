@@ -1,0 +1,29 @@
+h1{
+    text-align: center;
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left
+}
+
+th{
+    padding-right: 5em;
+    margin-top: 5em
+}
+
+td{
+    padding: 1em
+}
+
+.rectangular{
+    margin: auto;
+    display: flex;
+    height: 5em;
+    width: 10em;
+}
+
+.rectangular a{
+    margin: auto;
+}
