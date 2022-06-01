@@ -5,6 +5,7 @@ namespace App\DataFixtures;
 use App\Entity\City;
 use App\Entity\Place;
 use App\Entity\Trip;
+use App\Entity\State;
 use App\Entity\Campus;
 use App\Entity\Participant;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -48,18 +49,28 @@ class AppFixtures extends Fixture
         $this->addCampus();
         $this->addParticipant();
         $this->addState();
-        $this->addTrip();
+
         $this->loadCity($manager);
         $this->loadPlace($manager);
+        $this->addTrip();
 
     }
 
     private function addCampus()
     {
+        foreach (self::DEFAULT_CAMPUS as $campusName) {
+            $campus = new Campus();
+            $campus->setName($campusName);
+            $this->manager->persist($campus);
+        }
 
-    public function loadCity(ObjectManager $manager){
+        $this->manager->flush();
+    }
 
-        for($i = 1; $i <= 10; $i++){
+    public function loadCity(ObjectManager $manager)
+    {
+
+        for ($i = 1; $i <= 10; $i++) {
 
             $newCity = new City();
 
@@ -67,30 +78,20 @@ class AppFixtures extends Fixture
                 ->setName($this->faker->city)
                 ->setPostalCode($this->faker->countryCode);
 
-        foreach (self::DEFAULT_CAMPUS as $campusName) {
-            $campus = new Campus();
-            $campus->setName($campusName);
-            $this->manager->persist($campus);
-        }
+
             $manager->persist($newCity);
         }
 
         $this->manager->flush();
-        $manager->flush();
-
 
     }
 
-
-    private function addParticipant()
+    public function loadPlace(ObjectManager $manager)
     {
-        for ($i = 1; $i <= 10; $i++) {
-            $participant = new Participant();
-    public function loadPlace(ObjectManager $manager){
 
         $tabPlace = ['cinema', 'bar', 'piscine', 'chez mémé', 'travail', 'ENI'];
 
-        for($i = 1; $i <= 10; $i++){
+        for ($i = 1; $i <= 10; $i++) {
 
             $newPlace = new Place();
             $tabCity = $manager->getRepository(City::class)->findAll();
@@ -98,35 +99,46 @@ class AppFixtures extends Fixture
             $newPlace
                 ->setName($this->faker->randomElement($tabPlace))
                 ->setCity($this->faker->randomElement($tabCity))
-                ->setStreet($this->faker->streetName)
-            ;
+                ->setStreet($this->faker->streetName);
 
             $manager->persist($newPlace);
         }
 
-            $campus = $this->manager->getRepository(Campus::class)->findAll();
+        $this->manager->flush();
+    }
 
-            $participant
-                ->setPseudo($this->faker->userName())
-                ->setLastName($this->faker->lastName())
-                ->setFirstName($this->faker->firstName())
-                ->setPhone($this->faker->phoneNumber())
-                ->setEmail($this->faker->email)
-                ->setRoles(['ROLE_USER'])
-                ->setCampus($this->faker->randomElement($campus))
-                ->setActive(true);
-            $password = $this->encoder->hashPassword($participant, 'password');
-            $participant->setPassword($password);
-            $this->manager->persist($participant);
+    private function addParticipant()
+    {
+        for ($i = 1; $i <= 20; $i++) {
+            $participant = new Participant();
 
+            {
+
+                $campus = $this->manager->getRepository(Campus::class)->findAll();
+
+                $participant
+                    ->setPseudo($this->faker->userName())
+                    ->setLastName($this->faker->lastName())
+                    ->setFirstName($this->faker->firstName())
+                    ->setPhone($this->faker->phoneNumber())
+                    ->setEmail($this->faker->email)
+                    ->setRoles(['ROLE_USER'])
+                    ->setCampus($this->faker->randomElement($campus))
+                    ->setActive(true);
+                $password = $this->encoder->hashPassword($participant, 'password');
+                $participant->setPassword($password);
+                $this->manager->persist($participant);
+
+            }
         }
+
         $this->manager->flush();
     }
 
     private function addState()
     {
 
-        foreach (self::DEFAULT_STATE as $code =>$worded) {
+        foreach (self::DEFAULT_STATE as $code => $worded) {
             $state = new State();
             $state->setWorded($worded);
             $state->setStateCode($code);
@@ -136,34 +148,33 @@ class AppFixtures extends Fixture
         $this->manager->flush();
 
     }
-        $manager->flush();
 
-    }
+
     private function addTrip()
     {
         $activities = ['babyfoot', 'patinoire', 'cinéma', 'fête forraine', 'randonée', 'bar'];
-        $randomNumber = mt_rand( 20, 90);
         $campus = $this->manager->getRepository(Campus::class)->findAll();
         $states = $this->manager->getRepository(State::class)->findAll();
-        $place = new Place();
+        $place = $this->manager->getRepository(Place::class)->findAll();
+        $participant = $this->manager->getRepository(Participant::class)->findAll();
 
 
-        $trip = new Trip();
-        $trip->setName($this->faker->randomElement($activities))
-            ->setCampus($this->faker->randomElement($campus))
-            ->setDateStartHour($this->faker->dateTime)
-            ->setDuration($randomNumber)
-            ->setDateLimitRegistration($this->faker->dateTime)
-            ->setNbMaxRegistration($randomNumber)
-            ->setTripDescription($this->faker->text(20))
-            ->setState($this->faker->randomElement($states))
-            ->setPlace($place);
+        for ($i = 0; $i <= 10; $i++) {
+            $trip = new Trip();
 
+            $trip->setName($this->faker->randomElement($activities))
+                ->setOwner($this->faker->randomElement($participant))
+                ->setCampus($this->faker->randomElement($campus))
+                ->setDateStartHour($this->faker->dateTime)
+                ->setDuration($this->faker->numberBetween(10, 200))
+                ->setDateLimitRegistration($this->faker->dateTime)
+                ->setNbMaxRegistration($this->faker->numberBetween(2, 20))
+                ->setTripDescription('Coucou quelle sortie')
+                ->setState($this->faker->randomElement($states))
+                ->setPlace($this->faker->randomElement($place));
 
-
-
-
-        $this->manager->persist($trip);
+            $this->manager->persist($trip);
+        }
         $this->manager->flush();
     }
 
