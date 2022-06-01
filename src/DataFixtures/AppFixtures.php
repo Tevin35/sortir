@@ -19,6 +19,15 @@ class AppFixtures extends Fixture
 
     // On instancie le Faker en langue française
     /**
+     * @var UserPasswordHasherInterface
+     */
+    private $hasher;
+    /**
+     * @var Generator
+     */
+    private $faker;
+
+    /**
      * @var Generator $faker
      */
 
@@ -34,13 +43,7 @@ class AppFixtures extends Fixture
         $this->loadCity($manager);
         $this->loadPlace($manager);
 
-
-
-
     }
-
-
-
 
 
     public function loadCity(ObjectManager $manager){
@@ -68,7 +71,7 @@ class AppFixtures extends Fixture
         for($i = 1; $i <= 10; $i++){
 
             $newPlace = new Place();
-            $tabCity = $this->$manager->getRepository(City::class)->FindAll();
+            $tabCity = $manager->getRepository(City::class)->findAll();
 
             $newPlace
                 ->setName($this->faker->randomElement($tabPlace))
@@ -82,12 +85,5 @@ class AppFixtures extends Fixture
         $manager->flush();
 
     }
-
-
-
-
-
-
-
 
 }
