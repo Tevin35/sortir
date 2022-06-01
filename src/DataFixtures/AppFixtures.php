@@ -21,6 +21,7 @@ class AppFixtures extends Fixture
     private UserPasswordHasherInterface $encoder;
     private Generator $faker;
     private ObjectManager $manager;
+
     const DEFAULT_CAMPUS = ['Niort', 'Rennes', 'Quimper', 'Nantes'];
     const DEFAULT_STATE = [
         'CREA' => 'en création',
@@ -109,7 +110,7 @@ class AppFixtures extends Fixture
         $campus = $this->manager->getRepository(Campus::class)->findAll();
         $states = $this->manager->getRepository(State::class)->findAll();
         $place = new Place();
-        $city = new City();
+
 
         $trip = new Trip();
         $trip->setName($this->faker->randomElement($activities))
@@ -119,9 +120,12 @@ class AppFixtures extends Fixture
             ->setDateLimitRegistration($this->faker->dateTime)
             ->setNbMaxRegistration($randomNumber)
             ->setTripDescription($this->faker->text(20))
-            ->setPlace('Rennes')
-            ->getPlace()->setCity('France')
-            ->setState($this->faker->randomElement($states));
+            ->setState($this->faker->randomElement($states))
+            ->setPlace($place);
+
+
+
+
 
         $this->manager->persist($trip);
         $this->manager->flush();
