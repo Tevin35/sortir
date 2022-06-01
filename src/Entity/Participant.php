@@ -160,7 +160,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getLastName(): ?string
     {
-        return $this->lastname;
+        return $this->lastName;
     }
 
     public function setLastName(string $lastName): self
@@ -274,4 +274,5 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
 }
