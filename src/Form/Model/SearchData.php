@@ -5,6 +5,8 @@ namespace App\Form\Model;
 use App\Entity\Campus;
 use App\Entity\Trip;
 use phpDocumentor\Reflection\Types\Boolean;
+use Symfony\Component\Form\FormTypeInterface;
+
 
 class SearchData
 {
