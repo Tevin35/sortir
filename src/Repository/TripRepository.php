@@ -63,4 +63,13 @@ class TripRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
+
+    /**
+     * Get the trips link with the search options check or type in fields
+     */
+    public function findSearch() :array
+    {
+       return $this->findAll();
+    }
 }
