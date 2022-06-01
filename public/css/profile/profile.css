@@ -16,3 +16,14 @@ th{
 td{
     padding: 1em
 }
+
+.rectangular{
+    margin: auto;
+    display: flex;
+    height: 5em;
+    width: 10em;
+}
+
+.rectangular a{
+    margin: auto;
+}
