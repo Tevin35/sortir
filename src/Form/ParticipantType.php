@@ -30,11 +30,15 @@ class ParticipantType extends AbstractType
             ])
             ->add('email', TextareaType::class, [
                 'label' => "Email : ",
+            ])
+            ->add('password', TextareaType::class, [
+                'label' => "Mot de passe : ",
             ]);
 /*
 MANQUE MDP, CONFIRMATION, CAMPUS ET PHOTO
 */
 
+        /* TROUVER COMMENT METTRE ACTIVE PAR DEFAUT */
 
 
 
