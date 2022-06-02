@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\City;
 use App\Entity\Place;
 use App\Entity\Trip;
@@ -14,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -59,6 +61,12 @@ class CreateTripType extends AbstractType
                 'label' => "Description et infos"
             ])
 
+            ->add('campus', EntityType::class, [
+
+                'class' => Campus::class,
+                'choice_label' => 'name'
+            ])
+
             ->add('ville', EntityType::class, [
                 'mapped' => false,
                 'class' => City::class,
@@ -68,6 +76,10 @@ class CreateTripType extends AbstractType
                 'class' => Place::class,
                 'choice_label' => 'name'
             ])
+
+            ->add('enregistrer', SubmitType::class, ['label' => 'enregistrer'])
+            ->add('publier', SubmitType::class, ['label' => 'publier'])
+            ->add('annuler', ResetType::class, ['label' => 'annuler'])
 
         ;
     }

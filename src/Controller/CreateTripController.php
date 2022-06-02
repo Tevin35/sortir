@@ -36,27 +36,24 @@ class CreateTripController extends AbstractController
             dump('la');
 
             //On conditionne la valeur de State en fonction du bouton qui a été cliqué
-            if($request->get('enregistrer')){
+            if($tripForm->get('enregistrer')->isClicked()){
 
                 //hydratation de la variable state avec un select qui renvoi tous les statecode IS CREA
                 $state = $stateRepository->findOneBy(['stateCode'=>'CREA']);
                 dump('CREA');
             }
 
-            if($request->get('publier')){
+            if($tripForm->get('publier')->isClicked()){
 
                 $state = $stateRepository->findOneBy(['stateCode'=>'OPEN']);
                 dump('OPEN');
 
             }
 
-            $rec=$request->get('enregistrer');
-            dump($rec);
-
             //hydratation des attributs qui ne sont pas renseignés dans le formulaire
             $trip
                 ->setOwner($this->getUser())
-                ->setCampus($this->getUser()->getCampus())
+                //->setCampus($this->getUser()->getCampus())
                 ->setState($state);
 
             $tripRepository->add($trip, true);
@@ -68,4 +65,5 @@ class CreateTripController extends AbstractController
             'createTrip' => $tripForm->createView()
         ]);
     }
+
 }
