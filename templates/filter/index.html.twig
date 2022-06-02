@@ -2,11 +2,69 @@
 
 {% block title %}Consulter les sorties{% endblock %}
 
+
+
 {% block body %}
 
-    {{form_start(filterForm)}}
+    {{ form_start(filterForm) }}
+
+    {{ form_row(filterForm.campus) }}
     {{ form_row(filterForm.search) }}
-    <button>Soumission</button>
-    {{form_end(filterForm)}}
+    {{ form_row(filterForm.startingDate) }}
+    {{ form_row(filterForm.endingDate) }}
+
+    {{ form_widget(filterForm.ownerTrip) }}
+    {{ form_label(filterForm.ownerTrip) }}
+
+    {{ form_widget(filterForm.registerTrip) }}
+    {{ form_label(filterForm.registerTrip) }}
+
+
+    {{ form_widget(filterForm.unsuscribeTrip) }}
+    {{ form_label(filterForm.unsuscribeTrip) }}
+
+    {{ form_widget(filterForm.pastTrip) }}
+    {{ form_label(filterForm.pastTrip) }}
+
+    <button type="submit">Rechercher</button>
+    {{ form_end(filterForm) }}
+
+
+
+    <table class = 'tableau-style'>
+        <thead>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Clôture</th>
+            <th>Inscrit/Place</th>
+            <th>Etat</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for trip in listTrips %}
+            <tr>
+                <td>{{ trip.name }}</td>
+                <td>{{ trip.dateStartHour|date('Y-m-d') }}</td>
+                <td>{{ trip.dateLimitRegistration|date('Y-m-d') }}</td>
+                <td>{{ trip.nbMaxRegistration }}</td>
+                <td>{{ trip.state.worded }}</td>
+                <td>Inscrits</td>
+                <td>{{ trip.owner.firstName }}</td>
+                <td>Action</td>
+
+
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
 
 {% endblock %}
+
+
+

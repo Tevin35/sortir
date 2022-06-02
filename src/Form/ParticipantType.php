@@ -17,7 +17,7 @@ class ParticipantType extends AbstractType
     {
         $builder
             ->add('pseudo', TextareaType::class, [
-                'label' => "Psuedo : ",
+                'label' => "Pseudo : ",
                 ])
             ->add('firstName', TextareaType::class, [
             'label' => "Prénom : ",

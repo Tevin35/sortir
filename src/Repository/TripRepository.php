@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Trip;
+use App\Form\Model\SearchData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -68,8 +69,9 @@ class TripRepository extends ServiceEntityRepository
     /**
      * Get the trips link with the search options check or type in fields
      */
-    public function findSearch() :array
+    public function findSearch(SearchData $searchData) :array
     {
-       return $this->findAll();
+        $query = $this->createQueryBuilder('trip');
+       return $query->getQuery()->getResult();
     }
 }
