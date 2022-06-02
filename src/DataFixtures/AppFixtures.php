@@ -161,6 +161,7 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i <= 10; $i++) {
             $trip = new Trip();
+            $maxParticipants = $this->faker->numberBetween(2, 20);
 
             $trip->setName($this->faker->randomElement($activities))
                 ->setOwner($this->faker->randomElement($participant))
@@ -168,10 +169,14 @@ class AppFixtures extends Fixture
                 ->setDateStartHour($this->faker->dateTime)
                 ->setDuration($this->faker->numberBetween(10, 200))
                 ->setDateLimitRegistration($this->faker->dateTime)
-                ->setNbMaxRegistration($this->faker->numberBetween(2, 20))
+                ->setNbMaxRegistration($maxParticipants)
                 ->setTripDescription('Coucou quelle sortie')
                 ->setState($this->faker->randomElement($states))
                 ->setPlace($this->faker->randomElement($place));
+
+                   for ($i = 0; $i <= $this->faker->numberBetween(1,$maxParticipants); $i++) {
+                      $trip->addRegisteredParticipant($this->faker->randomElement($participant));
+                   }
 
             $this->manager->persist($trip);
         }

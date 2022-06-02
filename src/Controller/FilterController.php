@@ -15,13 +15,21 @@ class FilterController extends AbstractController
     #[Route('/filter', name: 'filter')]
     public function index(TripRepository $tripRepository, Request $request): Response
     {
+        /**
+         * pour avoir l'autocomplétion de tous les attributs de Participant
+         * @var Participant $user
+         */
+
+
+
         //Data initialization
         $SearchData = new SearchData();
         //Create form who use data
         $form = $this->createForm(FilterType::class, $SearchData);
         $form->handleRequest($request);
         $listTrips = $tripRepository->findSearch($SearchData);
-        dump($listTrips);
+
+
 
         return $this->render('filter/index.html.twig', [
             'listTrips' => $listTrips,
