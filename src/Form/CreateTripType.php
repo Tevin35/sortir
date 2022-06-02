@@ -2,9 +2,22 @@
 
 namespace App\Form;
 
+use App\Entity\City;
+use App\Entity\Place;
 use App\Entity\Trip;
+use Doctrine\DBAL\Types\DateTimeType;
+use Doctrine\DBAL\Types\TextType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\DataTransformer\BooleanToStringTransformer;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CreateTripType extends AbstractType
@@ -12,17 +25,50 @@ class CreateTripType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('dateStartHour')
-            ->add('duration')
-            ->add('dateLimitRegistration')
-            ->add('nbMaxRegistration')
-            ->add('tripDescription')
-            ->add('state')
-            ->add('place')
-            ->add('campus')
-            ->add('owner')
-            ->add('registeredParticipants')
+            ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class,[
+                'label' => "Nom de la sortie*",
+                'attr' => [
+                    'autofocus required placeholder' => "Nom de la sortie*"
+                ]
+            ])
+            ->add('dateStartHour', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class,[
+                'label' => "Date et heure de la sortie*",
+                'widget' => 'single_text',
+                'attr' => [
+                    'required placeholder' => "Date et heure de la sortie",
+                ]
+            ])
+            ->add('dateLimitRegistration',DateType::class,[
+                'label' => "Date limite d'inscription*",
+                'widget' => 'single_text',
+                'format' => 'yyyy-MM-dd',
+                'attr' => [
+                    'required placeholder'=>"Date limite d'inscription*"
+                ]
+            ])
+            ->add('nbMaxRegistration', NumberType::class,[
+                'label' => "Nombre de places"
+            ])
+
+            ->add('duration', NumberType::class,[
+                'label' => "Durée"
+            ])
+
+
+            ->add('tripDescription', TextareaType::class,[
+                'label' => "Description et infos"
+            ])
+
+            ->add('ville', EntityType::class, [
+                'mapped' => false,
+                'class' => City::class,
+                'choice_label' => 'name'
+            ])
+            ->add('place', EntityType::class,[
+                'class' => Place::class,
+                'choice_label' => 'name'
+            ])
+
         ;
     }
 
