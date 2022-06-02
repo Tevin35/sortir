@@ -6,7 +6,6 @@ use App\Repository\ParticipantRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -52,14 +51,10 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Trip::class, mappedBy: 'registeredParticipants')]
     private $participantTrips;
 
-    public function __construct(array $options =[])
+    public function __construct()
     {
         $this->trips = new ArrayCollection();
         $this->participantTrips = new ArrayCollection();
-        $resolver = new OptionsResolver();
-        $resolver->setDefaults([
-            'active' => 1
-        ]);
     }
 
     public function getId(): ?int
@@ -207,7 +202,7 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     public function setActive(bool $active): self
     {
         $this->active = $active;
-
+        $active=true;
         return $this;
     }
 
