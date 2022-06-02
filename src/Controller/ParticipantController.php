@@ -25,6 +25,7 @@ class ParticipantController extends AbstractController
     public function new(Request $request, ParticipantRepository $participantRepository): Response
     {
         $participant = new Participant();
+        $participant->setActive(true);
         $form = $this->createForm(ParticipantType::class, $participant);
         $form->handleRequest($request);
 
