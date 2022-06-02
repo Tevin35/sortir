@@ -2,14 +2,18 @@
 
 namespace App\Form;
 
+use App\Entity\Campus;
 use App\Entity\Participant;
+use App\Repository\CampusRepository;
 use App\Repository\ParticipantRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ParticipantType extends AbstractType
 {
@@ -28,6 +32,16 @@ class ParticipantType extends AbstractType
             ->add('phone', TextareaType::class, [
             'label' => "Téléphone : ",
             ])
+            ->add('campus', EntityType::class, [
+                //Nom de l'attribut que l'on veut utiliser pour l'affichage
+                'choice_label' => 'name',
+                'class' => Campus::class,
+                'required' => false,
+                'placeholder' => 'Choisir un campus',
+                'query_builder' => function (CampusRepository $campusRepository) {
+                    return $campusRepository->createQueryBuilder('c')->orderBy('c.name', 'ASC');
+                },
+                'constraints' => new NotBlank(['message' => 'choisir un campus'])])
             ->add('email', TextareaType::class, [
                 'label' => "Email : ",
             ])
