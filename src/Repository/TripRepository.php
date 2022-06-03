@@ -71,7 +71,7 @@ class TripRepository extends ServiceEntityRepository
      */
     public function findSearch(SearchData $searchData) :array
     {
-        $query = $this->createQueryBuilder('trip');
+        $query = $this->createQueryBuilder('trips');
        return $query->getQuery()->getResult();
     }
 }

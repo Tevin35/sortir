@@ -5,6 +5,10 @@
 
 
 {% block body %}
+    {% block nav %}
+        Participant : {{ app.user.pseudo }}
+    {% endblock %}
+
 
     {{ form_start(filterForm) }}
 
@@ -30,8 +34,7 @@
     {{ form_end(filterForm) }}
 
 
-
-    <table class = 'tableau-style'>
+    <table class='tableau-style'>
         <thead>
         <tr>
             <th>Nom de la sortie</th>
@@ -51,12 +54,27 @@
                 <td>{{ trip.name }}</td>
                 <td>{{ trip.dateStartHour|date('Y-m-d') }}</td>
                 <td>{{ trip.dateLimitRegistration|date('Y-m-d') }}</td>
-                <td> {{ trip.registeredParticipants|length}}/{{ trip.nbMaxRegistration }}</td>
+                <td> {{ trip.registeredParticipants|length }}/{{ trip.nbMaxRegistration }}</td>
                 <td>{{ trip.state.worded }}</td>
-                <td>{%if app.user in trip.registeredParticipants %}
-                    X{%endif%}</td>
-                <td>{{ trip.owner.firstName }}</td>
-                <td>Action</td>
+
+                {#                app.user récupère l'utilisateur courant #}
+                <td>{% if app.user in trip.registeredParticipants %}
+                        X{% endif %}</td>
+                <td>{{ trip.owner.pseudo }}</td>
+
+                <td>{% if app.user is same as(trip.owner) and trip.state.stateCode is same as('CREA') %}
+                        <p>Modifier - Publier</p>
+                    {% elseif app.user is same as(trip.owner) and trip.state.stateCode is same as('OPEN') %}
+                        <p>Afficher - Annuler</p>
+                    {% elseif app.user in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
+                        <p>Afficher - Se désister</p>
+                    {% elseif app.user not in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
+                        <p>Afficher - S'inscrire</p>
+                    {% elseif  trip.state.stateCode is same as('FENC') or trip.state.stateCode is same as('CLOS')  %}
+                        <p>Afficher </p>
+                    {% endif %}
+
+                </td>
 
 
             </tr>

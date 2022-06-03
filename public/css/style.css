@@ -40,6 +40,11 @@ body > .container{
     min-height: 100vh;
 }
 
+/***********************************************************
+* Table of welcome page (Flo)
+************************************************************/
+
+
 .tableau-style{
     border-collapse: collapse;
     min-width: 400px;
@@ -49,6 +54,7 @@ body > .container{
     margin:100px auto;
     border: 5px solid white;
 }
+
 
 thead tr{
     background-color: #5eb5e0;

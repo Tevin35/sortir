@@ -33,23 +33,23 @@ class Trip
     #[ORM\Column(type: 'text', nullable: true)]
     private $tripDescription;
 
-    #[ORM\ManyToOne(targetEntity: State::class, inversedBy: 'trip')]
+    #[ORM\ManyToOne(targetEntity: State::class, inversedBy: 'trip', fetch:'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
     private $state;
 
-    #[ORM\ManyToOne(targetEntity: Place::class, inversedBy: 'trip')]
+    #[ORM\ManyToOne(targetEntity: Place::class, inversedBy: 'trip',fetch:'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
     private $place;
 
-    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'trips')]
+    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'trips', fetch:'EAGER')]
     #[ORM\JoinColumn(nullable: false)]
     private $campus;
 
-    #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'trips')]
+    #[ORM\ManyToOne(targetEntity: Participant::class, inversedBy: 'trips', fetch: 'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'participantTrips')]
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'participantTrips', fetch: 'EAGER')]
     private $registeredParticipants;
 
     public function __construct()
