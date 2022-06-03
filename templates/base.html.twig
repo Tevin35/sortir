@@ -20,20 +20,23 @@
     {% endfor %}
 {% endfor %}
 
-<nav>
-    {%set myRoute = app.request.attributes.get('_route') %}
-    {#myRoute#}
-    {#        {% block nav %}#}
-    <ul>
-        <li>
-            <a class="{%if myRoute=='home' %} active{%endif%}" href="{{path('filter')}}" title="HomePage">Accueil</a>
-        </li>
-        <li>
-            <a class="{%if myRoute=='wish_list' %} active{%endif%}" href="{{path('app_logout')}}" title="ManageProfil">Mon Profil</a>
-        </li>
-        <li>
-            <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_logout')}}" title="Logout">Déconnexion</a>
-        </li>
+    <nav>
+        {%set myRoute = app.request.attributes.get('_route') %}
+        {#myRoute#}
+{#        {% block nav %}#}
+            <ul>
+                <li>
+                    <a class="{%if myRoute=='home' %} active{%endif%}" href="{{path('filter')}}" title="HomePage">Accueil</a>
+                </li>
+                <li>
+                    <a class="{%if myRoute=='wish_list' %} active{%endif%}" href="{{path('app_logout')}}" title="ManageProfil">Mon Profil</a>
+                </li>
+                <li>
+                    <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="ParticipantList">Liste des participants</a>
+                </li>
+                <li>
+                    <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_logout')}}" title="Logout">Déconnexion</a>
+                </li>
 
     </ul>
     {#        {% endblock %}#}

@@ -8,33 +8,51 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>ID</th>
+                {% endif %}
                 <th>Email</th>
-                <th>Roles</th>
-                <th>Password</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>Rôle</th>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>Mot de passe</th>
+                {% endif %}
                 <th>Pseudo</th>
-                <th>LastName</th>
-                <th>FirstName</th>
-                <th>Phone</th>
-                <th>Active</th>
-                <th>actions</th>
+                <th>Nom de famille</th>
+                <th>Prénom</th>
+                <th>Téléphone</th>
+                {% if is_granted('ROLE_ADMIN') %}
+                <th>Membre actif</th>
+                {% endif %}
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
         {% for participant in participants %}
             <tr>
+                {% if is_granted('ROLE_ADMIN') %}
                 <td>{{ participant.id }}</td>
+                {% endif %}
                 <td>{{ participant.email }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
                 <td>{{ participant.roles ? participant.roles|json_encode : '' }}</td>
+                {% endif %}
+                {% if is_granted('ROLE_ADMIN') %}
                 <td>{{ participant.password }}</td>
+                {% endif %}
                 <td>{{ participant.pseudo }}</td>
                 <td>{{ participant.lastName }}</td>
                 <td>{{ participant.firstName }}</td>
                 <td>{{ participant.phone }}</td>
-                <td>{{ participant.active ? 'Yes' : 'No' }}</td>
+                {% if is_granted('ROLE_ADMIN') %}
+                <td>{{ participant.active ? 'Oui' : 'Non' }}</td>
+                {% endif %}
                 <td>
-                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}">show</a>
-                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">edit</a>
+                    <a href="{{ path('app_participant_show', {'id': participant.id}) }}">Afficher le profil</a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">Éditer le profil</a>
+                    {% endif %}
                 </td>
             </tr>
         {% else %}
@@ -45,5 +63,7 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_participant_new') }}">Create new</a>
+    {% if is_granted('ROLE_ADMIN') %}
+    <button><a href="{{ path('app_participant_new') }}">Créer un nouveau participant</a></button>
+    {% endif %}
 {% endblock %}
