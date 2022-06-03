@@ -7,16 +7,27 @@
         <link rel="stylesheet" href="{{ asset('css/style.css') }}">
         {% block stylesheets %}
 {#            {{ encore_entry_link_tags('app') }}#}
-
         {% endblock %}
     </head>
     <body>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="flash-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+
+    {% block body %}
+
 
 
     <nav>
         {%set myRoute = app.request.attributes.get('_route') %}
         {#myRoute#}
-{#        {% block nav %}#}
+        {% block nav %}
             <ul>
                 <li>
                     <a class="{%if myRoute=='home' %} active{%endif%}" href="{{path('filter')}}" title="HomePage">Accueil</a>
@@ -29,13 +40,12 @@
                 </li>
 
             </ul>
-{#        {% endblock %}#}
+        {% endblock %}
     </nav>
 
-
-
-
-    {% block body %}
     {% endblock %}
+
+
+
     </body>
 </html>

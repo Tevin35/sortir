@@ -166,11 +166,11 @@ class AppFixtures extends Fixture
             $trip->setName($this->faker->randomElement($activities))
                 ->setOwner($this->faker->randomElement($participant))
                 ->setCampus($this->faker->randomElement($campus))
-                ->setDateStartHour($this->faker->dateTime)
+                ->setDateStartHour($this->faker->dateTimeBetween('-2 days', 'now'))
                 ->setDuration($this->faker->numberBetween(10, 200))
-                ->setDateLimitRegistration($this->faker->dateTime)
+                ->setDateLimitRegistration($this->faker->dateTimeBetween('-10 days', '-3 days'))
                 ->setNbMaxRegistration($maxParticipants)
-                ->setTripDescription('Coucou quelle sortie')
+                ->setTripDescription($this->faker->text(20))
                 ->setState($this->faker->randomElement($states))
                 ->setPlace($this->faker->randomElement($place));
 

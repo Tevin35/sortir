@@ -19,7 +19,7 @@ class FilterController extends AbstractController
          * pour avoir l'autocomplétion de tous les attributs de Participant
          * @var Participant $user
          */
-
+        $user = $this->getUser();
 
 
         //Data initialization
@@ -29,7 +29,11 @@ class FilterController extends AbstractController
         $form->handleRequest($request);
         $listTrips = $tripRepository->findSearch($SearchData);
 
+        if($form -> isSubmitted()) {
 
+
+
+        }
 
         return $this->render('filter/index.html.twig', [
             'listTrips' => $listTrips,
