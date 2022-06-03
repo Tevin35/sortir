@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CreateTrip{% endblock %}
+
+{% block body %}
+
+
+    <h2>Modifier une sortie</h2>
+
+    {{form_start(createTrip)}}
+    {{form_widget(createTrip)}}
+    {{form_end(createTrip)}}
+
+{% endblock %}

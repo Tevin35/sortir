@@ -58,7 +58,7 @@ class CreateTripController extends AbstractController
 
             $tripRepository->add($trip, true);
             $this->addFlash("success", "Sortie Ajoutée");
-           // return $this->redirectToRoute("filter");
+            return $this->redirectToRoute("filter");
         }
 
         return $this->render('create_trip/createTrip.twig', [
