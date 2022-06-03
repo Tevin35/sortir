@@ -38,7 +38,7 @@ class FilterType extends AbstractType
                 'class' => Campus::class,
                 'required' => false,
 
-                'placeholder' => 'Tous',
+                'placeholder' => 'Tous les campus',
                 'query_builder' => function (CampusRepository $campusRepository) {
                     return $campusRepository->createQueryBuilder('c')->orderBy('c.name', 'ASC');
                 },
