@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Entity\Campus;
+use App\Entity\Trip;
 use App\Form\FilterType;
 use App\Form\Model\SearchData;
 use App\Repository\TripRepository;
@@ -17,8 +19,10 @@ class FilterController extends AbstractController
     {
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
-         * @var Participant $user
+         * @var Participant $currentUser
          */
+        $currentUser = $this->getUser();
+        $trip = new Trip();
 
 
 
@@ -28,6 +32,15 @@ class FilterController extends AbstractController
         $form = $this->createForm(FilterType::class, $SearchData);
         $form->handleRequest($request);
         $listTrips = $tripRepository->findSearch($SearchData);
+
+
+
+        if($form -> isSubmitted()) {
+            $listTrips = $tripRepository->findSearch($SearchData);
+        }
+
+
+
 
 
 

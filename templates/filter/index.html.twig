@@ -70,7 +70,7 @@
                         <p>Afficher - Se désister</p>
                     {% elseif app.user not in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
                         <p>Afficher - S'inscrire</p>
-                    {% elseif  trip.state.stateCode is same as('FENC') or trip.state.stateCode is same as('CLOS')  %}
+                    {% elseif  trip.state.stateCode is same as('FENC') or trip.state.stateCode is same as('CLOS') or trip.state.stateCode is same as('CANC')  %}
                         <p>Afficher </p>
                     {% endif %}
 

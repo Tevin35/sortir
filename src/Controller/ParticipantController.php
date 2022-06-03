@@ -57,12 +57,26 @@ class ParticipantController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_participant_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
+    public function edit(Request $request, Participant $participant, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository): Response
     {
+        /* GET USER NON FONCTIONNEL... A MODIFIER*/
+        /*        /**
+         * pour avoir l'autocomplétion de tous les attributs de Participant
+         * @var Participant $user
+         */
+        /* $user = $this->getUser();*/
+
         $form = $this->createForm(ParticipantType::class, $participant);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $participant->setPassword(
+                $participantPasswordHasher->hashPassword(
+                    $participant,
+                    $form->get('password')->getData()
+                )
+            );
+
             $participantRepository->add($participant, true);
 
             return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
