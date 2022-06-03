@@ -17,7 +17,7 @@ class Trip
     private $id;
 
     #[ORM\Column(type: 'string', length: 50)]
-    #[Asserts\NotBlank, Asserts\LessThan('5')]
+    #[Asserts\NotBlank]
     private $name;
 
     #[ORM\Column(type: 'datetime')]

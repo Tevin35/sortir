@@ -7,6 +7,7 @@ use App\Entity\Trip;
 use App\Form\CreateTripType;
 use App\Repository\StateRepository;
 use App\Repository\TripRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -93,4 +94,22 @@ class CreateTripController extends AbstractController
             'createTrip' => $tripForm->createView()
         ]);
     }
+
+    #[Route('/display/trip/{id}', name: 'app_display_trip')]
+    public function displayTrip($id, TripRepository $tripRepository, Request $request): Response
+    {
+        //récupération de l'id d'une sortie
+        $trip = $tripRepository->find($id);
+
+        //récupération d'une liste de participants
+        $listParticipants = $trip->getRegisteredParticipants();
+        dump($listParticipants);
+
+        return $this->render('create_trip/displayTrip.twig', ['trip' => $trip, 'listParticipants'=>$listParticipants]);
+    }
+
+
+
+
+
 }
