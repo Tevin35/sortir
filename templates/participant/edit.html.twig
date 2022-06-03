@@ -1,13 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Participant{% endblock %}
+{% block title %}Editer un Participant{% endblock %}
+
 
 {% block body %}
+    {% if is_granted('ROLE_ADMIN') %}
+
     <h1>Edit Participant</h1>
 
     {{ include('participant/_form.html.twig', {'button_label': 'Update'}) }}
 
+    {{ include('participant/_delete_form.html.twig') }}
+    {% endif %}
+
     <button><a href="{{ path('app_participant_index') }}">Retour à la liste des participants</a></button>
 
-    {{ include('participant/_delete_form.html.twig') }}
+
 {% endblock %}
