@@ -19,6 +19,7 @@ class SearchData
     private $unsuscribeTrip;
     private $pastTrip;
 
+
     /**
      * @return mixed
      */

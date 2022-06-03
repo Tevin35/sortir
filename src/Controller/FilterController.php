@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Campus;
+use App\Entity\Participant;
+use App\Entity\State;
 use App\Entity\Trip;
 use App\Form\FilterType;
 use App\Form\Model\SearchData;
@@ -17,29 +19,31 @@ class FilterController extends AbstractController
     #[Route('/filter', name: 'filter')]
     public function index(TripRepository $tripRepository, Request $request): Response
     {
-        /**
-         * pour avoir l'autocomplétion de tous les attributs de Participant
-         * @var Participant $currentUser
-         */
-        $currentUser = $this->getUser();
+
+    //Pas besoin de getUser ici car on le place dans le constructeur du repository comme dans les fixtures au final
+        //On sera en revanche obligé de déclarer une variable avant.
+
         $trip = new Trip();
-
-
 
         //Data initialization
         $SearchData = new SearchData();
+        $state = new State();
+
+
+
+
+
         //Create form who use data
         $form = $this->createForm(FilterType::class, $SearchData);
         $form->handleRequest($request);
-        $listTrips = $tripRepository->findSearch($SearchData);
+        $listTrips = $tripRepository->findSearch($SearchData, $state);
 
 
 
         if($form -> isSubmitted()) {
-            $listTrips = $tripRepository->findSearch($SearchData);
+            $listTrips = $tripRepository->findSearch($SearchData, $state);
+            dump($listTrips);
         }
-
-
 
 
 
