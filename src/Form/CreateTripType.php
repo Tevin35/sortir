@@ -21,6 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThan;
 
 class CreateTripType extends AbstractType
 {
@@ -77,9 +78,10 @@ class CreateTripType extends AbstractType
                 'choice_label' => 'name'
             ])
 
-            ->add('enregistrer', SubmitType::class, ['label' => 'enregistrer'])
-            ->add('publier', SubmitType::class, ['label' => 'publier'])
-            ->add('annuler', ResetType::class, ['label' => 'annuler'])
+            ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
+            ->add('publier', SubmitType::class, ['label' => 'Publier'])
+            ->add('supprimer', SubmitType::class, ['label' => 'Supprimer'])
+            ->add('annuler', ResetType::class, ['label' => 'Annuler'])
 
         ;
     }

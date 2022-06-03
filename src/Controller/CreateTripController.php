@@ -66,4 +66,31 @@ class CreateTripController extends AbstractController
         ]);
     }
 
+    #[Route('/update/trip/{id}', name: 'app_update_trip')]
+    public function updateTrip($id, TripRepository $tripRepository, Request $request): Response
+    {
+        //récupération de l'id d'une sortie
+        $trip = $tripRepository->find($id);
+
+        //création d'un formulaire (On utilise le même formulaire: CreateTripType)
+        $tripForm = $this -> CreateForm(CreateTripType::class, $trip);
+        $tripForm -> handleRequest($request);
+
+        //suppression d'une sortie
+        if ($tripForm->isSubmitted()){
+
+            if($tripForm->get('supprimer')->isClicked()){
+
+                $tripRepository->remove($trip, true);
+                $this->addFlash("success", "Sortie Supprimée");
+
+            }
+
+            return $this->redirectToRoute("filter");
+        }
+
+        return $this->render('create_trip/updateTrip.twig', [
+            'createTrip' => $tripForm->createView()
+        ]);
+    }
 }
