@@ -2,6 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Campus;
+use App\Entity\Participant;
+use App\Entity\State;
 use App\Entity\Trip;
 use App\Form\Model\SearchData;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -69,9 +72,36 @@ class TripRepository extends ServiceEntityRepository
     /**
      * Get the trips link with the search options check or type in fields
      */
-    public function findSearch(SearchData $searchData) :array
+    public function findSearch(SearchData $searchData): array
     {
-        $query = $this->createQueryBuilder('trips');
-       return $query->getQuery()->getResult();
+        $query = $this
+            ->createQueryBuilder('t')
+            ->select('t');
+
+        if (!empty($searchData->getCampus())) {
+            $query = $query
+                ->andWhere('t.campus IN (:campus)')
+                ->setParameter('campus', $searchData->getCampus());
+        }
+        if (!empty($searchData->getSearch())) {
+            $query = $query
+                ->andWhere('t.name LIKE :search')
+                ->setParameter('search', "%{$searchData->getSearch()}%");
+        }
+
+        if (!empty($searchData->getStartingDate())) {
+            $query = $query
+                ->andWhere('t.dateStartHour >= :date_start')
+                ->setParameter('date_start', $searchData->getStartingDate()->format('Y-m-d 00:00:00'));
+        }
+
+        if (!empty($searchData->getEndingDate())) {
+            $query = $query
+                ->andWhere('t.dateStartHour <= :date_end')
+                ->setParameter('date_end', $searchData->getEndingDate()->format('Y-m-d 23:59:59'));
+        }
+
+
+        return $query->getQuery()->getResult();
     }
 }

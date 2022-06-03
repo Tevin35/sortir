@@ -6,7 +6,9 @@ use App\Entity\Campus;
 use App\Entity\Trip;
 use App\Form\Model\SearchData;
 use App\Repository\CampusRepository;
+use App\Repository\ParticipantRepository;
 use Doctrine\ORM\Mapping\Entity;
+use http\Client\Curl\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -34,13 +36,13 @@ class FilterType extends AbstractType
                 //Nom de l'attribut que l'on veut utiliser pour l'affichage
                 'choice_label' => 'name',
                 'class' => Campus::class,
-
                 'required' => false,
+
                 'placeholder' => 'Tous',
                 'query_builder' => function (CampusRepository $campusRepository) {
                     return $campusRepository->createQueryBuilder('c')->orderBy('c.name', 'ASC');
                 },
-                'constraints' => new NotBlank(['message' => 'choisir un campus']),
+//                'constraints' => new NotBlank(['message' => 'choisir un campus']),
 
             ])
             ->add('search', TextType::class, [
@@ -83,7 +85,7 @@ class FilterType extends AbstractType
                 'required' => false,
             ])
 
-            //Rechercher dans le child correspond au name !
+
         ;
 
 
