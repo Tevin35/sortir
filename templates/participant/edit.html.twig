@@ -8,9 +8,11 @@
     <h1>Éditer un participant</h1>
 
     {{ include('participant/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
-    {% if is_granted('ROLE_ADMIN') %}
+{#    Donne un bug. Pour le moment, on ne peut pas supprimer d'utilisateurs.
+{% if is_granted('ROLE_ADMIN') %}
     {{ include('participant/_delete_form.html.twig') }}
     {% endif %}
+#}
     <button><a href="{{ path('app_participant_index') }}">Retour à la liste des participants</a></button>
 
 

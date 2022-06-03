@@ -48,7 +48,7 @@ class ParticipantController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_participant_show', methods: ['GET'])]
+    #[Route('/profile/view', name: 'app_participant_show', methods: ['GET'])]
     public function show(Participant $participant): Response
     {
         return $this->render('participant/show.html.twig', [
@@ -56,35 +56,33 @@ class ParticipantController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_participant_edit', requirements: ["id" => "\d+"], methods: ['GET', 'POST'])]
-    public function edit(Request $request, Participant $participant, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository): Response
+    #[Route('/profile/edit', name: 'app_participant_edit', methods: ['GET', 'POST'])]
+    public function edit(Request $request, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository): Response
     {
-        /* GET USER NON FONCTIONNEL... A MODIFIER*/
-        /*        /**
+        /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
          * @var Participant $user
          */
-        /* $user = $this->getUser();*/
+        $user = $this->getUser();
 
-        $form = $this->createForm(ParticipantType::class, $participant);
+        $form = $this->createForm(ParticipantType::class, $user);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $participant->setPassword(
+            $user->setPassword(
                 $participantPasswordHasher->hashPassword(
-                    $participant,
+                    $user,
                     $form->get('password')->getData()
                 )
             );
 
-            $participantRepository->add($participant, true);
+            $participantRepository->add($user, true);
 
             return $this->redirectToRoute('app_participant_index', [], Response::HTTP_SEE_OTHER);
         }
 
-        return $this->renderForm('participant/edit.html.twig', [
-            'participant' => $participant,
-            'form' => $form,
+        return $this->render('participant/edit.html.twig', [
+            'form' => $form->createView()
         ]);
     }
 
