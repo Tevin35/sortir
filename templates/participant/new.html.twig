@@ -3,9 +3,12 @@
 {% block title %}Nouveau participant{% endblock %}
 
 {% block body %}
+    {% if is_granted('ROLE_ADMIN') %}
+
     <h1>Créer un nouveau participant</h1>
 
     {{ include('participant/_form.html.twig') }}
 
+    {% endif %}
     <button><a href="{{ path('app_participant_index') }}">Retour à la liste des participants</a></button>
 {% endblock %}

@@ -25,15 +25,15 @@
                     <a class="{%if myRoute=='wish_list' %} active{%endif%}" href="{{path('app_logout')}}" title="ManageProfil">Mon Profil</a>
                 </li>
                 <li>
+                    <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="ParticipantList">Liste des participants</a>
+                </li>
+                <li>
                     <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_logout')}}" title="Logout">Déconnexion</a>
                 </li>
 
             </ul>
 {#        {% endblock %}#}
     </nav>
-
-
-
 
     {% block body %}
     {% endblock %}

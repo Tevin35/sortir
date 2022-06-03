@@ -24,6 +24,8 @@ class ParticipantType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+
         $builder
             ->add('pseudo', TextareaType::class, [
                 'label' => "Pseudo : ",
@@ -89,6 +91,7 @@ class ParticipantType extends AbstractType
                 },
                 'constraints' => new NotBlank(['message' => 'choisir un campus'])])
 ;
+
 /*
 MANQUE MDP, CONFIRMATION, CAMPUS ET PHOTO
 */
@@ -117,4 +120,5 @@ MANQUE MDP, CONFIRMATION, CAMPUS ET PHOTO
             'data_class' => Participant::class,
         ]);
     }*/
+
 }

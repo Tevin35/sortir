@@ -63,5 +63,7 @@
         </tbody>
     </table>
 
+    {% if is_granted('ROLE_ADMIN') %}
     <button><a href="{{ path('app_participant_new') }}">Créer un nouveau participant</a></button>
+    {% endif %}
 {% endblock %}
