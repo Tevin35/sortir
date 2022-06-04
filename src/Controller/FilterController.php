@@ -17,11 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-
 class FilterController extends AbstractController
 {
-
-
 
 
     #[Route('/filter', name: 'filter')]
@@ -74,9 +71,6 @@ class FilterController extends AbstractController
 
 
     }
-
-
-
 
 
     #[Route('/unsubscribe', name: 'unsubscribe')]
