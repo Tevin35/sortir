@@ -30,7 +30,7 @@
     {{ form_widget(filterForm.pastTrip) }}
     {{ form_label(filterForm.pastTrip) }}
 
-    <button type="submit">Rechercher</button>
+    <button type="submit" name="search">Rechercher </button>
     {{ form_end(filterForm) }}
 
 
@@ -67,9 +67,9 @@
                     {% elseif app.user is same as(trip.owner) and trip.state.stateCode is same as('OPEN') %}
                         <p>Afficher - Annuler</p>
                     {% elseif app.user in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
-                        <p>Afficher - Se désister</p>
+                        <p>Afficher - <a href="{{path("unsubscribe")}}" >Se désister </a></p>
                     {% elseif app.user not in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
-                        <p>Afficher - S'inscrire</p>
+                        <p>Afficher -  <a href="{{ path('register', {'id': trip.id}) }}", type="submit">S'inscrire</a></p>
                     {% elseif  trip.state.stateCode is same as('FENC') or trip.state.stateCode is same as('CLOS') or trip.state.stateCode is same as('CANC')  %}
                         <p>Afficher </p>
                     {% endif %}
