@@ -68,12 +68,22 @@
                     {% elseif app.user is same as(trip.owner) and trip.state.stateCode is same as('OPEN') %}
                         <p>Afficher - Annuler</p>
 
+                    {% elseif  trip.dateStartHour|date('Y-m-d') is same as(trip.dateLimitRegistration|date('Y-m-d'))  %}
+                        <p>Afficher </p>
+
+                    {% elseif app.user in trip.registeredParticipants and trip.registeredParticipants|length is same as(trip.nbMaxRegistration) %}
+                        <p>Pouet - <a href="{{path('unsubscribe',{'id':trip.id})}}">Se désister</a></p>
+
+
                     {% elseif app.user in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
-                        <p>Afficher - <a href="{{path("unsubscribe")}}" >Se désister </a></p>
+                        <p>Afficher - <a href="{{path('unsubscribe',{'id':trip.id})}}">Se désister</a></p>
 
                     {% elseif app.user not in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
+                        <p>Afficher - <a href="{{path('register',{'id':trip.id})}}">S'inscrire</a></p>
 
-                    {% elseif  trip.state.stateCode is same as('FENC') or trip.state.stateCode is same as('CLOS') or trip.state.stateCode is same as('CANC')  %}
+
+
+                    {% elseif  trip.state.stateCode is same as('CLOS') or trip.state.stateCode is same as('CANC')  %}
                         <p>Afficher </p>
                     {% endif %}
 

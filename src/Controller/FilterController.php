@@ -8,6 +8,7 @@ use App\Entity\State;
 use App\Entity\Trip;
 use App\Form\FilterType;
 use App\Form\Model\SearchData;
+use App\Repository\StateRepository;
 use App\Repository\TripRepository;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -53,7 +54,7 @@ class FilterController extends AbstractController
 
 
     #[Route('/register/{id}', name: 'register')]
-    public function register($id, TripRepository $tripRepository, Request $request, EntityManagerInterface $em): Response
+    public function register($id, TripRepository $tripRepository, Request $request, EntityManagerInterface $em, StateRepository $stateRepository): Response
     {
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
@@ -63,7 +64,15 @@ class FilterController extends AbstractController
         $currentUser = $this->getUser();
 //        dd($currentUser);
         $trip = $tripRepository->find($id);
+        $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->addRegisteredParticipant($currentUser);
+
+
+        if (count($trip->getRegisteredParticipants()) === $trip->getNbMaxRegistration()) {
+            $state = $stateRepository->findOneBy(['stateCode' => 'FENC']);
+        }
+        $trip->setState($state);
+
         $em->persist($trip);
         $em->flush();
 
@@ -73,17 +82,30 @@ class FilterController extends AbstractController
     }
 
 
-    #[Route('/unsubscribe', name: 'unsubscribe')]
-    public function unsubscribe(TripRepository $tripRepository, Request $request): Response
+    #[Route('/unsubscribe/{id}', name: 'unsubscribe')]
+    public function unsubscribe($id, TripRepository $tripRepository, Request $request, EntityManagerInterface $em, StateRepository $stateRepository): Response
     {
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
          * @var Participant $currentUser
          */
-        $trip = new Trip();
+
         $currentUser = $this->getUser();
+//        dd($currentUser);
+        $trip = $tripRepository->find($id);
         $trip->removeRegisteredParticipant($currentUser);
+
+        if (count($trip->getRegisteredParticipants()) < $trip->getNbMaxRegistration()) {
+            $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
+        }
+        $trip->setState($state);
+
+
+        $em->persist($trip);
+        $em->flush();
+
         return $this->redirectToRoute('filter');
+
 
     }
 
