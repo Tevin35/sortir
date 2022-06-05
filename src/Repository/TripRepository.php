@@ -144,6 +144,7 @@ class TripRepository extends ServiceEntityRepository
 
         }
 
+        $query = $query->orderBy('t.dateStartHour', 'DESC');
 
         return $query->getQuery()->getResult();
     }
