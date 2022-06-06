@@ -8,6 +8,7 @@ use App\Entity\State;
 use App\Entity\Trip;
 use App\Form\FilterType;
 use App\Form\Model\SearchData;
+use App\Repository\CampusRepository;
 use App\Repository\StateRepository;
 use App\Repository\TripRepository;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -35,15 +36,14 @@ class FilterController extends AbstractController
         $state = new State();
         $trip = new Trip();
 
-
         //Create form who use data
         $form = $this->createForm(FilterType::class, $SearchData);
         $form->handleRequest($request);
         $listTrips = $tripRepository->findSearch($SearchData, $state);
 
         if ($form->isSubmitted()) {
-            $listTrips = $tripRepository->findSearch($SearchData, $state);
-            dump($listTrips);
+            $listTrips = $tripRepository->findSearch($SearchData, $state, );
+
         }
 
 
@@ -73,6 +73,7 @@ class FilterController extends AbstractController
         }
         $trip->setState($state);
 
+//        $em->persist($state);
         $em->persist($trip);
         $em->flush();
 
@@ -93,6 +94,7 @@ class FilterController extends AbstractController
         $currentUser = $this->getUser();
 //        dd($currentUser);
         $trip = $tripRepository->find($id);
+        $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->removeRegisteredParticipant($currentUser);
 
         if (count($trip->getRegisteredParticipants()) < $trip->getNbMaxRegistration()) {
@@ -102,6 +104,7 @@ class FilterController extends AbstractController
 
 
         $em->persist($trip);
+//        $em->persist($state);
         $em->flush();
 
         return $this->redirectToRoute('filter');

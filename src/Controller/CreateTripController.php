@@ -18,9 +18,7 @@ class CreateTripController extends AbstractController
     #[Route('/create/trip', name: 'app_create_trip')]
     public function addTrip(TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
-
         $trip = new Trip();
-
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
          * @var Participant $user

@@ -174,9 +174,12 @@ class AppFixtures extends Fixture
                 ->setState($this->faker->randomElement($states))
                 ->setPlace($this->faker->randomElement($place));
 
-                   for ($i = 0; $i <= $this->faker->numberBetween(1,$maxParticipants); $i++) {
+                $trip->addRegisteredParticipant($trip->getOwner());
+
+                   for ($i = 0; $i <= $this->faker->numberBetween(1,$maxParticipants-2); $i++) {
                       $trip->addRegisteredParticipant($this->faker->randomElement($participant));
                    }
+
 
             $this->manager->persist($trip);
         }
