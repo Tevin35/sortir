@@ -122,7 +122,6 @@ class TripRepository extends ServiceEntityRepository
                 ->setParameter('ownerTrip', $this->participant);
         }
 
-
         if (!empty($searchData->getRegisterTrip())) {
             $query = $query
                 //MEMBER OF permet de chercher un membre parmi une collection de membre

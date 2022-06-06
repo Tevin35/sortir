@@ -7,7 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Asserts;
+use App\EventListener\Triplistener;
+use Symfony\Component\Validator\Constraint as Assert;
 
+
+/** @Trip @EntityListeners({"TripListener"}) */
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 class Trip
 {
@@ -22,6 +26,7 @@ class Trip
 
     #[ORM\Column(type: 'datetime')]
     #[Asserts\Date]
+
     private $dateStartHour;
 
     #[ORM\Column(type: 'integer')]
