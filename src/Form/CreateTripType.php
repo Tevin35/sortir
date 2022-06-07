@@ -82,6 +82,14 @@ class CreateTripType extends AbstractType
                 'choice_label' => 'name'
             ])
 
+
+            ->add('plus', ButtonType::class,[
+                //'mapped'=>false,
+                'label' => '+',
+
+            ])
+
+
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('publier', SubmitType::class, ['label' => 'Publier'])
             ->add('supprimer', SubmitType::class, ['label' => 'Supprimer'])
