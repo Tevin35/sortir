@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Security;
+use function PHPUnit\Framework\assertIsNotInt;
 
 /**
  * @extends ServiceEntityRepository<Trip>
@@ -85,8 +86,12 @@ class TripRepository extends ServiceEntityRepository
     {
         $query = $this
             ->createQueryBuilder('t')
-            ->select('t')
-            ->innerJoin('t.state', 's');
+            ->select('t, s, o, rp')
+            ->leftJoin('t.state', 's')
+            ->leftJoin('t.owner', 'o')
+            ->leftJoin('t.registeredParticipants','rp')
+            ->andWhere("s.stateCode != 'HIST' ");
+
 
         if (!empty($searchData->getCampus())) {
             $query = $query
@@ -113,13 +118,10 @@ class TripRepository extends ServiceEntityRepository
 
         if (!empty($searchData->getOwnerTrip())) {
             $query = $query
-
-                ->andWhere(' t.owner = :ownerTrip')
-                ->setParameter('ownerTrip', $searchData->getOwnerTrip());
+                ->andWhere('t.owner = :ownerTrip')
+                ->setParameter('ownerTrip', $this->participant);
         }
 
-
-        //dd($participant);
         if (!empty($searchData->getRegisterTrip())) {
             $query = $query
                 //MEMBER OF permet de chercher un membre parmi une collection de membre
@@ -144,6 +146,7 @@ class TripRepository extends ServiceEntityRepository
 
         }
 
+        $query = $query->orderBy('t.dateStartHour', 'DESC');
 
         return $query->getQuery()->getResult();
     }

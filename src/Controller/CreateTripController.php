@@ -18,9 +18,7 @@ class CreateTripController extends AbstractController
     #[Route('/create/trip', name: 'app_create_trip')]
     public function addTrip(TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
-
         $trip = new Trip();
-
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
          * @var Participant $user
@@ -33,8 +31,8 @@ class CreateTripController extends AbstractController
         dump('ici');
 
         //traitement du formulaire
-        if($tripForm -> isSubmitted()){
-            dump('la');
+        if($tripForm -> isSubmitted() && $tripForm->isValid()){
+
 
             //On conditionne la valeur de State en fonction du bouton qui a été cliqué
             if($tripForm->get('enregistrer')->isClicked()){
@@ -107,8 +105,6 @@ class CreateTripController extends AbstractController
 
         return $this->render('create_trip/displayTrip.twig', ['trip' => $trip, 'listParticipants'=>$listParticipants]);
     }
-
-
 
 
 
