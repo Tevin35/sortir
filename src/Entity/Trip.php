@@ -6,7 +6,7 @@ use App\Repository\TripRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Asserts;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 class Trip
@@ -17,11 +17,16 @@ class Trip
     private $id;
 
     #[ORM\Column(type: 'string', length: 50)]
-    #[Asserts\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 50,
+        minMessage: 'Le nom doit comporter au moins 2 caractères',
+        maxMessage: 'Le nom doit comporter au plus 50 caractères',
+    )]
     private $name;
 
     #[ORM\Column(type: 'datetime')]
-    #[Asserts\Date]
+    //#[Asserts\Date]
     private $dateStartHour;
 
     #[ORM\Column(type: 'integer')]

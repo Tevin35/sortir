@@ -157,7 +157,7 @@ class AppFixtures extends Fixture
         $states = $this->manager->getRepository(State::class)->findAll();
         $place = $this->manager->getRepository(Place::class)->findAll();
         $participant = $this->manager->getRepository(Participant::class)->findAll();
-
+        $randomDateLimitRegistration = $this->faker->dateTimeBetween('-30 days', '+30 days');
 
         for ($i = 0; $i <= 10; $i++) {
             $trip = new Trip();
@@ -166,17 +166,20 @@ class AppFixtures extends Fixture
             $trip->setName($this->faker->randomElement($activities))
                 ->setOwner($this->faker->randomElement($participant))
                 ->setCampus($this->faker->randomElement($campus))
-                ->setDateStartHour($this->faker->dateTimeBetween('-2 days', 'now'))
+                ->setDateStartHour($this->faker->dateTimeBetween($randomDateLimitRegistration->modify('+5 days'),  $randomDateLimitRegistration->modify('+30 days')))
+                ->setDateLimitRegistration($this->faker->dateTimeBetween($randomDateLimitRegistration))
                 ->setDuration($this->faker->numberBetween(10, 200))
-                ->setDateLimitRegistration($this->faker->dateTimeBetween('-10 days', '-3 days'))
                 ->setNbMaxRegistration($maxParticipants)
                 ->setTripDescription($this->faker->text(20))
                 ->setState($this->faker->randomElement($states))
                 ->setPlace($this->faker->randomElement($place));
 
-                   for ($i = 0; $i <= $this->faker->numberBetween(1,$maxParticipants); $i++) {
+                $trip->addRegisteredParticipant($trip->getOwner());
+
+                   for ($i = 1; $i <= $this->faker->numberBetween(1,$maxParticipants-2); $i++) {
                       $trip->addRegisteredParticipant($this->faker->randomElement($participant));
                    }
+
 
             $this->manager->persist($trip);
         }

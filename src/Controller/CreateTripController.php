@@ -33,7 +33,7 @@ class CreateTripController extends AbstractController
         dump('ici');
 
         //traitement du formulaire
-        if($tripForm -> isSubmitted()){
+        if($tripForm -> isSubmitted() && $tripForm->isValid()){
             dump('la');
 
             //On conditionne la valeur de State en fonction du bouton qui a été cliqué
