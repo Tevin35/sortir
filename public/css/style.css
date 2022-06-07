@@ -1,18 +1,18 @@
 /***********************************************************
 * Styles Globals
 ************************************************************/
-body{
-    margin:0;
+body {
+    margin: 0;
     /*background-color: #5eb5e0;*/
-    background: linear-gradient(#000000,#132135);
-    background-attachment:fixed ;
+    background: linear-gradient(#000000, #132135);
+    background-attachment: fixed;
     background-position: center center;
-    background-size: cover ;
+    background-size: cover;
     color: #FFFFFF;
     font-family: 'Hachi Maru Pop', cursive;
 }
 
-.container{
+.container {
     min-width: 360px;
     max-width: 1000px;
     margin: auto;
@@ -21,20 +21,20 @@ body{
 
 a {
     text-decoration: none;
-    color:#D3D3D3;
+    color: #D3D3D3;
 }
 
-a:hover{
+a:hover {
     text-decoration: underline;
-    color:darkorange;
-    cursor:pointer;
+    color: darkorange;
+    cursor: pointer;
 }
 
-img{
+img {
     max-width: 100%;
 }
 
-body > .container{
+body > .container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -45,92 +45,131 @@ body > .container{
 ************************************************************/
 
 
-.tableau-style{
+tbody {
+    display: block;
+    height: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;/* even columns width , fix width of table too*/
+}
+thead {
+    width: calc( 100% - 1.050em )/* scrollbar is average 1em/16px width, remove it from thead width */
+}
+table {
+    width: 90%;
     border-collapse: collapse;
-    min-width: 400px;
-    width: auto;
-    box-shadow: 0 5px 50px rgba(0,0,0,0.15);
+    min-width: 300px;
     cursor: pointer;
-    margin:100px auto;
+    margin: 60px;
     border: 5px solid white;
 }
 
+table tbody tr {
+    width: 100%;
+}
+table thead, table tbody tr {
+    display: table;
+    table-layout: fixed;
+}
 
-thead tr{
+thead tr {
     background-color: #5eb5e0;
-    color:#fff;
+    color: #fff;
     text-align: center;
 }
 
-th td{
-padding: 15px 20px;
-
+th td {
+    padding: 15px 20px;
 }
 
-tbody tr, td, th{
-    border :1px solid #ddd;
+thead tr, th {
+    border: 1px solid #D3D3D3;
+    text-align: center;
+}
+tbody tr, td {
+    border: 1px solid #D3D3D3;
     text-align: center;
 }
 
-tbody tr:nth-child(even){
+tbody tr:nth-child(even) {
     background-color: #5eb5e0;
 }
+
+th {
+    background-color: royalblue;
+}
+
+
+
+/***********************************************************
+* Table of welcome page (Flo) - Scrollbar
+************************************************************/
+
+
+
+
 
 /***********************************************************
 * Header
 ************************************************************/
-.site-title{
+.site-title {
     display: flex;
     align-items: center;
-    font-size: 48px ;
+    font-size: 48px;
 }
 
-.site-title img{
+.site-title img {
     height: 48px;
     display: block;
     margin-right: 5px;
 }
 
-nav ul{
+nav ul {
     margin: 5px 0;
     display: flex;
     list-style: none;
     padding-left: 0;
 }
 
-nav a{
+nav a {
     display: block;
     padding: 5px 8px;
     margin-right: 10px;
 }
-.active{
-    color:red;
+
+.active {
+    color: red;
 }
+
 /***********************************************************
 * Main
 ************************************************************/
-main{
+main {
     padding: 30px 0;
     border-top: 1px solid #D3D3D3;
     border-bottom: 1px solid #D3D3D3;
     min-height: 450px;
 }
 
-h1{
-    margin:0;
+h1 {
+    margin: 0;
     color: #D3D3D3;
 }
 
 /***********************************************************
 * Footer
 ************************************************************/
-footer{
+footer {
     padding: 20px 0;
     text-align: center;
 }
 
 
-.alert-success{
+.alert-success {
     border: 1px solid green;
     width: 300px;
     height: 50px;
@@ -143,7 +182,7 @@ footer{
 /***********************************************************
 * Form
 ************************************************************/
-label{
+label {
     display: block;
 }
 
