@@ -73,7 +73,9 @@ class ParticipantType extends AbstractType
                 'type' => PasswordType::class,
                 'invalid_message' => "Les deux mots de passe doivent se correspondre.",
                 'options' => ['attr' => ['class' => 'password_field']],
-                'required' => true,
+                'required' => false,
+                'mapped' => false,
+                'empty_data' => '',
                 'first_options' => ['label' => 'Mot de passe : '],
                 'second_options' => ['label' => 'Confirmation :' ],
                 'constraints' => [

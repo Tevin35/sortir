@@ -88,12 +88,17 @@ class ParticipantController extends AbstractController
                 $user->setBrochureFilename($brochureFileName);
             }
 
-            $user->setPassword(
+            $newPassword = $form['password']->getData();
+
+            if($newPassword){
+                $participantPasswordHasher->hashPassword($user, $newPassword);
+            }
+            /*$user->setPassword(
                 $participantPasswordHasher->hashPassword(
                     $user,
                     $form->get('password')->getData()
                 )
-            );
+            );*/
 
             $participantRepository->add($user, true);
 
@@ -104,6 +109,7 @@ class ParticipantController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+
 
     #[Route('/{id}', name: 'app_participant_delete', methods: ['POST'])]
     public function delete(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
