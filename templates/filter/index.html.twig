@@ -52,6 +52,8 @@
             <tbody>
 
             {% for trip in listTrips %}
+                {%if not(app.user is not same as(trip.owner) and trip.state.stateCode is same as('CREA'))  %}
+
                 <tr>
                     <td>{{ trip.name }}</td>
                     <td>{{ trip.dateStartHour|date('Y-m-d') }}</td>
@@ -85,7 +87,7 @@
 
 
 
-                        {% elseif  trip.state.stateCode is same as('CLOS') or trip.state.stateCode is same as('CANC') %}
+                        {% elseif  trip.state.stateCode is same as('PROG') or trip.state.stateCode is same as('CLOS') or trip.state.stateCode is same as('CANC') or trip.state.stateCode is same as('FENC') %}
                             <p>Afficher </p>
                         {% endif %}
 
@@ -93,7 +95,7 @@
 
 
                 </tr>
-
+                {%endif%}
             {% endfor %}
             </tbody>
         </table>

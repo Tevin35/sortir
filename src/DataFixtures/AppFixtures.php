@@ -159,26 +159,28 @@ class AppFixtures extends Fixture
         $participant = $this->manager->getRepository(Participant::class)->findAll();
         $randomDateLimitRegistration = $this->faker->dateTimeBetween('-30 days', '+30 days');
 
-        for ($i = 0; $i <= 10; $i++) {
+        for ($i = 0; $i <= 12; $i++) {
             $trip = new Trip();
             $maxParticipants = $this->faker->numberBetween(2, 20);
+
+            $start = $this->faker->dateTimeBetween('-10 days', '+10 days');
+            $end = $this->faker->dateTimeBetween($start->format('Y-m-d H:i:s').' +1 days', $start->format('Y-m-d H:i:s').' +1 days');
 
             $trip->setName($this->faker->randomElement($activities))
                 ->setOwner($this->faker->randomElement($participant))
                 ->setCampus($this->faker->randomElement($campus))
-                ->setDateStartHour($this->faker->dateTimeBetween($randomDateLimitRegistration->modify('+5 days'),  $randomDateLimitRegistration->modify('+30 days')))
-                ->setDateLimitRegistration($this->faker->dateTimeBetween($randomDateLimitRegistration))
+                ->setDateLimitRegistration($start)
+                ->setDateStartHour($end)
                 ->setDuration($this->faker->numberBetween(10, 200))
                 ->setNbMaxRegistration($maxParticipants)
                 ->setTripDescription($this->faker->text(20))
                 ->setState($this->faker->randomElement($states))
                 ->setPlace($this->faker->randomElement($place));
 
-                $trip->addRegisteredParticipant($trip->getOwner());
-
-                   for ($i = 1; $i <= $this->faker->numberBetween(1,$maxParticipants-2); $i++) {
-                      $trip->addRegisteredParticipant($this->faker->randomElement($participant));
-                   }
+            $trip->addRegisteredParticipant($trip->getOwner());
+            for ($i = 1; $i <= $this->faker->numberBetween(1,$maxParticipants-2); $i++) {
+                $trip->addRegisteredParticipant($this->faker->randomElement($participant));
+            }
 
 
             $this->manager->persist($trip);

@@ -20,12 +20,16 @@ class TripListener
         $this->stateRepository = $stateRepository;
     }
 
+
     /**
      * @param LifecycleEventArgs $args
      */
     public function postLoad(LifecycleEventArgs $args)
     {
+//       $state = $this->stateRepository->
+
         $entity = $args->getObject();
+        $state = $this->stateRepository->findOneBy(['stateCode']);
 
         if ($entity instanceof Trip) {
             //Date time du jour
@@ -33,23 +37,21 @@ class TripListener
             //Date de cloture
             $dateOfFenced = $entity->getDateLimitRegistration();
             //Date, heure et minutes de la sortie
-            $dateOfTrip = $entity->getDateStartHour()->format('Y-m-d H:i');
-            $durationOfTrip = $entity->getDuration();
-//            $endOfTrip = strtotime($dateOfTrip.'+'.$durationOfTrip.'minute');
+            $dateOfTrip = $entity->getDateStartHour();
 
-            if ($dateNow > $dateOfFenced) {
+
+            if ($dateOfFenced >= $dateNow) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'FENC']);
                 $entity->setState($state);
                 $this->em->flush();
-            }
 
-            if ($dateOfTrip >= $dateNow) {
+            } elseif ($dateOfTrip >= $dateNow) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'PROG']);
                 $entity->setState($state);
                 $this->em->flush();
             }
-
-//            if ($endOfTrip >= $dateNow){
+//
+//            if ($dateNow-> $endOfTrip){
 //                $state = $this->stateRepository->findOneBy(['stateCode' => 'CLOS']);
 //                $entity->setState($state);
 //                $this->em->flush();
@@ -61,8 +63,8 @@ class TripListener
 //                $entity->setState($state);
 //                $this->em->flush();
 //            }
+//        }
         }
+
     }
-
-
 }
