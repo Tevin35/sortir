@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
@@ -18,6 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
@@ -92,6 +94,29 @@ class ParticipantType extends AbstractType
                     return $campusRepository->createQueryBuilder('c')->orderBy('c.name', 'ASC');
                 },
                 'constraints' => new NotBlank(['message' => 'choisir un campus'])])
+            ->add('brochure', FileType::class, [
+                'label' => 'Photo de profil (fichier attendu : JPG, PNG, GIF)',
+
+                // unmapped means that this field is not associated to any entity property
+                'mapped' => false,
+
+                // make it optional so you don't have to re-upload the PDF file
+                // every time you edit the Product details
+                'required' => false,
+
+                // unmapped fields can't define their validation using annotations
+                // in the associated entity, so you can use the PHP constraint classes
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/jpeg',
+                            'image/jpg',
+                            'image/gif',
+                            'image/png'
+                        ],
+                        'mimeTypesMessage' => 'Veuillez uploader un fichier jpg, png ou gif valide',
+            ])]])
 ;
 
 /*
@@ -116,12 +141,12 @@ MANQUE MDP, CONFIRMATION, CAMPUS ET PHOTO
         ;*/
     }
 
-/*    public function configureOptions(OptionsResolver $resolver): void
+  public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Participant::class,
         ]);
-    }*/
+    }
 
 
 }

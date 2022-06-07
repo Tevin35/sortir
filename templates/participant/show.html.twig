@@ -8,7 +8,7 @@
 
 {% block body %}
     <h1>{{ participant.pseudo }}</h1>
-
+    <img class="displayed" src="{{ asset('uploads/brochures/' ~ participant.brochureFilename)}}" alt="Image de profil">
     <table class="table">
         <tbody>
             <tr>
@@ -30,7 +30,8 @@
            <tr>
                 <th>Campus</th>
                 <td>{{ participant.campus.name }}</td>
-            </tr>
+           </tr>
+
         </tbody>
     </table>
 

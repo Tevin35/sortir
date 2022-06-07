@@ -5,7 +5,11 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ParticipantType;
 use App\Repository\ParticipantRepository;
+use App\Service\FileUploader;
+use Faker\Core\File;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -23,7 +27,7 @@ class ParticipantController extends AbstractController
     }
 
     #[Route('/new', name: 'app_participant_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository): Response
+    public function new(Request $request, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository, FileUploader $fileUploader): Response
     {
         $participant = new Participant();
         $participant->setActive(true);
@@ -31,6 +35,13 @@ class ParticipantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $brochureFile */
+            $brochureFile = $form->get('brochure')->getData();
+            if ($brochureFile) {
+                $brochureFileName = $fileUploader->upload($brochureFile);
+                $participant->setBrochureFilename($brochureFileName);
+            }
+
             $participant->setPassword(
                 $participantPasswordHasher->hashPassword(
                     $participant,
@@ -48,6 +59,7 @@ class ParticipantController extends AbstractController
         ]);
     }
 
+
     #[Route('{id}', name: 'app_participant_show', methods: ['GET'])]
     public function show(Participant $participant): Response
     {
@@ -57,7 +69,7 @@ class ParticipantController extends AbstractController
     }
 
     #[Route('/profile/edit', name: 'app_participant_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository): Response
+    public function edit(Request $request, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository, FileUploader $fileUploader): Response
     {
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
@@ -69,6 +81,13 @@ class ParticipantController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $brochureFile */
+            $brochureFile = $form->get('brochure')->getData();
+            if ($brochureFile) {
+                $brochureFileName = $fileUploader->upload($brochureFile);
+                $user->setBrochureFilename($brochureFileName);
+            }
+
             $user->setPassword(
                 $participantPasswordHasher->hashPassword(
                     $user,

@@ -51,6 +51,9 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Trip::class, mappedBy: 'registeredParticipants')]
     private $participantTrips;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private $brochureFilename;
+
     public function __construct()
     {
         $this->trips = new ArrayCollection();
@@ -274,6 +277,19 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    public function getBrochureFilename(): ?string
+    {
+        return $this->brochureFilename;
+    }
+
+    public function setBrochureFilename(?string $brochureFilename): self
+    {
+        $this->brochureFilename = $brochureFilename;
+
+        return $this;
+    }
+
 
 }
 

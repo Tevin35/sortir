@@ -30,9 +30,9 @@ a:hover {
     cursor: pointer;
 }
 
-img {
+/*img {
     max-width: 100%;
-}
+}*/
 
 body > .container {
     display: flex;
