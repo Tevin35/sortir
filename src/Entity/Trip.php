@@ -8,7 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Asserts;
 use App\EventListener\Triplistener;
-use Symfony\Component\Validator\Constraint as Assert;
+
 
 
 /** @Trip @EntityListeners({"TripListener"}) */
@@ -28,11 +28,11 @@ class Trip
     #[Asserts\Date]
 
     private $dateStartHour;
-
     #[ORM\Column(type: 'integer')]
     private $duration;
 
     #[ORM\Column(type: 'date')]
+    #[Asserts\Date]
     private $dateLimitRegistration;
 
     #[ORM\Column(type: 'integer', nullable: true)]

@@ -31,12 +31,13 @@ class TripListener
             //Date time du jour
             $dateNow = new \DateTime();
             //Date de cloture
-            $dateOfFenced = $entity->getDateLimitRegistration()->format('Y-m-d');
+            $dateOfFenced = $entity->getDateLimitRegistration();
             //Date, heure et minutes de la sortie
             $dateOfTrip = $entity->getDateStartHour()->format('Y-m-d H:i');
+            $durationOfTrip = $entity->getDuration();
+//            $endOfTrip = strtotime($dateOfTrip.'+'.$durationOfTrip.'minute');
 
-
-            if ($dateOfFenced>= $dateNow) {
+            if ($dateNow > $dateOfFenced) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'FENC']);
                 $entity->setState($state);
                 $this->em->flush();
@@ -48,17 +49,18 @@ class TripListener
                 $this->em->flush();
             }
 
-            if ($dateOfTrip->modify('+'.$entity->getDuration().'minutes') >= $dateNow) {
-                $state = $this->stateRepository->findOneBy(['stateCode' => 'CLOS']);
-                $entity->setState($state);
-                $this->em->flush();
-            }
-
-            if ($dateOfTrip->modify('+1 month') >= $dateNow) {
-                $state = $this->stateRepository->findOneBy(['stateCode' => 'HIST']);
-                $entity->setState($state);
-                $this->em->flush();
-            }
+//            if ($endOfTrip >= $dateNow){
+//                $state = $this->stateRepository->findOneBy(['stateCode' => 'CLOS']);
+//                $entity->setState($state);
+//                $this->em->flush();
+//            }
+//
+//
+//            if ($dateOfTrip->modify('+ 1 month') >= $dateNow) {
+//                $state = $this->stateRepository->findOneBy(['stateCode' => 'HIST']);
+//                $entity->setState($state);
+//                $this->em->flush();
+//            }
         }
     }
 
