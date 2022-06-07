@@ -8,6 +8,7 @@ use App\Entity\Place;
 use App\Entity\Trip;
 use Doctrine\DBAL\Types\DateTimeType;
 use Doctrine\DBAL\Types\TextType;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\DataTransformer\BooleanToStringTransformer;
@@ -19,6 +20,8 @@ use Symfony\Component\Form\Extension\Core\Type\ResetType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\GreaterThan;
@@ -73,6 +76,7 @@ class CreateTripType extends AbstractType
                 'class' => City::class,
                 'choice_label' => 'name'
             ])
+
             ->add('place', EntityType::class,[
                 'class' => Place::class,
                 'choice_label' => 'name'
@@ -81,9 +85,34 @@ class CreateTripType extends AbstractType
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('publier', SubmitType::class, ['label' => 'Publier'])
             ->add('supprimer', SubmitType::class, ['label' => 'Supprimer'])
-            ->add('annuler', ResetType::class, ['label' => 'Annuler'])
+            ->add('annuler', ResetType::class, ['label' => 'Annuler']);
 
-        ;
+            /*
+            $builder->addEventListener(
+
+
+                FormEvents::PRE_SET_DATA,
+                function (FormEvent $event){
+                    $form = $event->getForm();
+                    dump($form);
+
+                    $data = $event->getData();
+                    dump($data);
+
+                    $city = $data->getPlace()->getCity();
+                    dump($city);
+                    $places = null === $city ? [] : $city->getPlace();
+                    dump($places);
+
+                    $form->add('place', EntityType::class, [
+                        'class' => Place::class,
+                        'placeholder'=>'',
+                        'choices'=>$places,
+                    ]);
+                }
+            );
+            */
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
