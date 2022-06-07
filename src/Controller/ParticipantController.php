@@ -48,7 +48,7 @@ class ParticipantController extends AbstractController
         ]);
     }
 
-    #[Route('/profile/view', name: 'app_participant_show', methods: ['GET'])]
+    #[Route('{id}', name: 'app_participant_show', methods: ['GET'])]
     public function show(Participant $participant): Response
     {
         return $this->render('participant/show.html.twig', [
