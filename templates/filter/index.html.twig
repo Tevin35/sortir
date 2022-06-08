@@ -34,73 +34,78 @@
     {{ form_end(filterForm) }}
 
 
-    <div id="table-wrapper">
-        <div id="table-scroll">
-            <table class="tableau-style">
-                <thead>
+
+    <table class="tableau-style">
+        <thead>
+        <tr>
+            <th>Nom de la sortie</th>
+            <th>Date de la sortie</th>
+            <th>Clôture</th>
+            <th>Inscrit/Place</th>
+            <th>Etat</th>
+            <th>Inscrit</th>
+            <th>Organisateur</th>
+            <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for trip in listTrips %}
+            {% if not(app.user is not same as(trip.owner) and trip.state.stateCode is same as('CREA')) %}
+
                 <tr>
-                    <th>Nom de la sortie</th>
-                    <th>Date de la sortie</th>
-                    <th>Clôture</th>
-                    <th>Inscrit/Place</th>
-                    <th>Etat</th>
-                    <th>Inscrit</th>
-                    <th>Organisateur</th>
-                    <th>Action</th>
+                    <td>{{ trip.name }}</td>
+                    <td>{{ trip.dateStartHour|date('Y-m-d') }}</td>
+                    <td>{{ trip.dateLimitRegistration|date('Y-m-d') }}</td>
+                    <td> {{ trip.registeredParticipants|length }}/{{ trip.nbMaxRegistration }}</td>
+                    <td>{{ trip.state.worded }}</td>
+
+                    {#                app.user récupère l'utilisateur courant #}
+                    <td>{% if app.user in trip.registeredParticipants %}
+                            X{% endif %}</td>
+                    <td>{{ trip.owner.pseudo }}</td>
+
+                    <td>{% if app.user is same as(trip.owner) and trip.state.stateCode is same as('CREA') %}
+                            <p><a href="{{ path('app_update_trip',{'id':trip.id}) }}">Modifier</a> - <a
+                                        href="{{ path('app_display_trip',{'id':trip.id}) }}">Publier</a></p>
+
+                        {% elseif app.user is same as(trip.owner) and trip.state.stateCode is same as('OPEN') %}
+                            <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a> - Annuler</p>
+
+                        {% elseif  trip.dateStartHour|date('Y-m-d') is same as(trip.dateLimitRegistration|date('Y-m-d')) %}
+                            <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a></p>
+
+                        {% elseif app.user in trip.registeredParticipants and trip.registeredParticipants|length is same as(trip.nbMaxRegistration) %}
+                            <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}"></a> - <a
+                                        href="{{ path('unsubscribe',{'id':trip.id}) }}">Se désister</a></p>
+
+
+                        {% elseif app.user in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
+                            <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a> - <a
+                                        href="{{ path('unsubscribe',{'id':trip.id}) }}">Se désister</a></p>
+
+                        {% elseif app.user not in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
+                            <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a> - <a
+                                        href="{{ path('register',{'id':trip.id}) }}">S'inscrire</a></p>
+
+
+                        {% elseif  trip.state.stateCode is same as('PROG') or trip.state.stateCode is same as('CLOS') or trip.state.stateCode is same as('CANC') or trip.state.stateCode is same as('FENC') %}
+                            <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a></p>
+                        {% endif %}
+
+                    </td>
+
+
                 </tr>
-                </thead>
-                <tbody>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
 
-                {% for trip in listTrips %}
-                    {% if not(app.user is not same as(trip.owner) and trip.state.stateCode is same as('CREA')) %}
+    <a href="{{path('app_create_trip')}}">
 
-                        <tr>
-                            <td>{{ trip.name }}</td>
-                            <td>{{ trip.dateStartHour|date('Y-m-d') }}</td>
-                            <td>{{ trip.dateLimitRegistration|date('Y-m-d') }}</td>
-                            <td> {{ trip.registeredParticipants|length }}/{{ trip.nbMaxRegistration }}</td>
-                            <td>{{ trip.state.worded }}</td>
+        <button type="button">Créer une sortie</button>
 
-                            {#                app.user récupère l'utilisateur courant #}
-                            <td>{% if app.user in trip.registeredParticipants %}
-                                    X{% endif %}</td>
-                            <td>{{ trip.owner.pseudo }}</td>
+    </a>
 
-                            <td>{% if app.user is same as(trip.owner) and trip.state.stateCode is same as('CREA') %}
-                                    <p><a href="{{ path('app_update_trip',{'id':trip.id}) }}">Modifier</a> - <a href="{{ path('app_display_trip',{'id':trip.id}) }}">Publier</a></p>
-
-                                {% elseif app.user is same as(trip.owner) and trip.state.stateCode is same as('OPEN') %}
-                                    <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a> - Annuler</p>
-
-                                {% elseif  trip.dateStartHour|date('Y-m-d') is same as(trip.dateLimitRegistration|date('Y-m-d')) %}
-                                    <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a></p>
-
-                                {% elseif app.user in trip.registeredParticipants and trip.registeredParticipants|length is same as(trip.nbMaxRegistration) %}
-                                    <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}"></a> - <a
-                                                href="{{ path('unsubscribe',{'id':trip.id}) }}">Se désister</a></p>
-
-
-                                {% elseif app.user in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
-                                    <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a> - <a
-                                                href="{{ path('unsubscribe',{'id':trip.id}) }}">Se désister</a></p>
-
-                                {% elseif app.user not in trip.registeredParticipants and trip.state.stateCode is same as('OPEN') %}
-                                    <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a> - <a
-                                                href="{{ path('register',{'id':trip.id}) }}">S'inscrire</a></p>
-
-
-                                {% elseif  trip.state.stateCode is same as('PROG') or trip.state.stateCode is same as('CLOS') or trip.state.stateCode is same as('CANC') or trip.state.stateCode is same as('FENC') %}
-                                    <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a></p>
-                                {% endif %}
-
-                            </td>
-
-
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </div>
 {% endblock %}

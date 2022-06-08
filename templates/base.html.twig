@@ -2,12 +2,15 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta lang ="fr">
+    <meta lang="fr">
     <title>{% block title %}Welcome!{% endblock %}</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    <link rel="icon"
+          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
+
     {% block stylesheets %}
-        {#            {{ encore_entry_link_tags('app') }}#}
+        {#            {{ encore_entry_link_tags('app') }} #}
 
     {% endblock %}
 </head>
@@ -20,29 +23,29 @@
     {% endfor %}
 {% endfor %}
 
-    <nav>
-        {%set myRoute = app.request.attributes.get('_route') %}
-        {#myRoute#}
-{#        {% block nav %}#}
-            <ul>
-                <li>
-                    <a class="{%if myRoute=='home' %} active{%endif%}" href="{{path('filter')}}" title="HomePage">Accueil</a>
-                </li>
-                <li>
-                    <a class="{%if myRoute=='profile' %} active{%endif%}" href="{{path('app_participant_edit')}}" title="ManageProfil">Modifier mon profil</a>
-                </li>
-                <li>
-                    <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="ParticipantList">Liste des participants</a>
-                </li>
-                <li>
-                    <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_logout')}}" title="Logout">Déconnexion</a>
-                </li>
+<nav>
+    {% set myRoute = app.request.attributes.get('_route') %}
+
+    <ul>
+        <li>
+            <a class="{% if myRoute=='home' %} active{% endif %}" href="{{ path('filter') }}"
+               title="HomePage">Accueil</a>
+        </li>
+        <li>
+            <a class="{% if myRoute=='profile' %} active{% endif %}" href="{{ path('app_participant_edit') }}"
+               title="ManageProfil">Modifier mon profil</a>
+        </li>
+        <li>
+            <a class="{% if myRoute=='participant' %} active{% endif %}" href="{{ path('app_participant_index') }}"
+               title="ParticipantList">Liste des participants</a>
+        </li>
+        <li>
+            <a class="{% if myRoute=='test' %} active{% endif %}" href="{{ path('app_logout') }}" title="Logout">Déconnexion</a>
+        </li>
 
     </ul>
-    {#        {% endblock %}#}
+
 </nav>
-
-
 
 
 {% block body %}
