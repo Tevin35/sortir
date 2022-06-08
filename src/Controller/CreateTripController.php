@@ -164,7 +164,7 @@ class CreateTripController extends AbstractController
             $trip
                 ->setState($state)
                 ->setTripDescription($tripDescription . ' Motif d\'annulation : ' .$motif );
-
+            dump($trip);
             $tripRepository->add($trip, true);
             $this->addFlash('success', 'Sortie annulée');
             return $this->redirectToRoute('filter');

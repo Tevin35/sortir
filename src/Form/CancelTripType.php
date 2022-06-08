@@ -7,6 +7,7 @@ use App\Entity\Place;
 use App\Entity\Trip;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -25,8 +26,8 @@ class CancelTripType extends AbstractType
 
             ])
 
-            ->add('enregistrer', SubmitType::class)
-            ->add('annuler', SubmitType::class)
+            ->add('annulerSortie', SubmitType::class, ['label'=>'Annuler la sortie'])
+            ->add('retour', ButtonType::class, ['label'=>'Page précédente'])
 
         ;
     }
@@ -34,7 +35,8 @@ class CancelTripType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Trip::class,
+            //null => aucune entité n'est associée à ce formulaire
+            'data_class' => null,
         ]);
     }
 }
