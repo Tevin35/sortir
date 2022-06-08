@@ -44,7 +44,6 @@ body > .container {
 * Table of welcome page (Flo)
 ************************************************************/
 
-
 tbody {
     display: block;
     height: 300px;
@@ -59,10 +58,11 @@ thead, tbody tr {
 thead {
     width: calc( 100% - 1.050em )/* scrollbar is average 1em/16px width, remove it from thead width */
 }
+
 table {
     width: 90%;
     border-collapse: collapse;
-    min-width: 300px;
+    min-width: 100px;
     cursor: pointer;
     margin: 60px;
     border: 5px solid white;

@@ -7,6 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\EventListener\Triplistener;
+
+
+/** @Trip @EntityListeners({"TripListener"}) */
+
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 class Trip
@@ -59,7 +64,7 @@ class Trip
     #[ORM\JoinColumn(nullable: false)]
     private $place;
 
-    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'trips', fetch:'EAGER')]
+    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'trips', fetch:'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
     private $campus;
 
@@ -67,7 +72,7 @@ class Trip
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'participantTrips', fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'participantTrips', fetch: 'LAZY')]
     private $registeredParticipants;
 
     public function __construct()
