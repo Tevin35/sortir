@@ -121,7 +121,7 @@ class CreateTripController extends AbstractController
             if($tripForm->get('annuler')->isClicked()){
 
 
-                return $this->redirectToRoute('app_cancel_trip','trip.id');
+                return $this->redirectToRoute('app_cancel_trip',['id' => $trip->getId()]);
 
             }
 
@@ -145,13 +145,25 @@ class CreateTripController extends AbstractController
 
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
+        $tripDescription = $trip->getTripDescription();
+        dump($tripDescription);
 
-        $tripForm = $this->createForm(CancelTripType::class, $trip);
-        $tripForm->handleRequest($request);
+        $cancelForm = CancelTripType::class;
+        $form=$this->createForm($cancelForm);
+        $form->handleRequest($request);
 
-        if ($tripForm->isSubmitted() && $tripForm->isValid()){
+        //$cancelForm->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+
+            $motif=$form['cancelMotif']->getData();
+            dump($motif);
+
+
             $state = $stateRepository->findOneBy(['stateCode'=>'CANC']);
-            $trip->setState($state);
+            $trip
+                ->setState($state)
+                ->setTripDescription($tripDescription . ' Motif d\'annulation : ' .$motif );
 
             $tripRepository->add($trip, true);
             $this->addFlash('success', 'Sortie annulée');
@@ -159,7 +171,7 @@ class CreateTripController extends AbstractController
         }
 
         return $this->render('create_trip/cancelTrip.twig',[
-            'cancelTrip'=>$tripForm->createView()
+            'cancelTrip'=>$form->createView()
         ]);
     }
 

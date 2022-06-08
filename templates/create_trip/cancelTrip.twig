@@ -7,8 +7,12 @@
 
     <h2>Annuler une sortie</h2>
 
-    {{form_start(cancelTrip)}}
-    {{form_widget(cancelTrip)}}
-    {{form_end(cancelTrip)}}
+    {{ form_start(cancelTrip) }}
+
+    {{ form_row(cancelTrip.cancelMotif) }}
+    {{ form_row(cancelTrip.annulerSortie) }}
+    <a href="{{ path('filter') }}">{{ form_row(cancelTrip.retour) }}</a>
+
+    {{ form_end(cancelTrip) }}
 
 {% endblock %}

@@ -31,46 +31,41 @@ class CreateTripType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class,[
+            ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
                 'label' => "Nom de la sortie*",
                 'attr' => [
                     'autofocus required placeholder' => "Nom de la sortie*"
                 ]
             ])
-            ->add('dateStartHour', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class,[
+            ->add('dateStartHour', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class, [
                 'label' => "Date et heure de la sortie*",
                 'widget' => 'single_text',
                 'attr' => [
                     'required placeholder' => "Date et heure de la sortie",
                 ]
             ])
-            ->add('dateLimitRegistration',DateType::class,[
+            ->add('dateLimitRegistration', DateType::class, [
                 'label' => "Date limite d'inscription*",
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
                 'attr' => [
-                    'required placeholder'=>"Date limite d'inscription*"
+                    'required placeholder' => "Date limite d'inscription*"
                 ]
             ])
-            ->add('nbMaxRegistration', NumberType::class,[
+            ->add('nbMaxRegistration', NumberType::class, [
                 'label' => "Nombre de places"
             ])
-
-            ->add('duration', NumberType::class,[
+            ->add('duration', NumberType::class, [
                 'label' => "Durée"
             ])
-
-
-            ->add('tripDescription', TextareaType::class,[
+            ->add('tripDescription', TextareaType::class, [
                 'label' => "Description et infos"
             ])
-
             ->add('campus', EntityType::class, [
 
                 'class' => Campus::class,
                 'choice_label' => 'name'
             ])
-
             ->add('ville', EntityType::class, [
                 'mapped' => false,
                 'class' => City::class,
@@ -83,43 +78,44 @@ class CreateTripType extends AbstractType
             ])
 
 
-            ->add('plus', ButtonType::class,[
+
+            ->add('plus', ButtonType::class, [
                 //'mapped'=>false,
                 'label' => '+',
 
             ])
-
-
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('publier', SubmitType::class, ['label' => 'Publier'])
             ->add('supprimer', SubmitType::class, ['label' => 'Supprimer'])
             ->add('annuler', SubmitType::class, ['label' => 'Annuler']);
 
-            /*
-            $builder->addEventListener(
+        /*
+        $builder->addEventListener(
 
 
-                FormEvents::PRE_SET_DATA,
-                function (FormEvent $event){
-                    $form = $event->getForm();
-                    dump($form);
+            FormEvents::PRE_SET_DATA,
+            function (FormEvent $event) {
+                $form = $event->getForm();
+                dump($form);
 
-                    $data = $event->getData();
-                    dump($data);
+                $data = $event->getData();
+                dump($data);
 
-                    $city = $data->getPlace()->getCity();
-                    dump($city);
-                    $places = null === $city ? [] : $city->getPlace();
-                    dump($places);
+                $city = $data->getPlace()->getCity();
+                dump($city);
+                $places = null === $city ? [] : $city->getPlace();
+                dump($places);
 
-                    $form->add('place', EntityType::class, [
-                        'class' => Place::class,
-                        'placeholder'=>'',
-                        'choices'=>$places,
-                    ]);
-                }
-            );
-            */
+                $form->add('place', EntityType::class, [
+                    'class' => Place::class,
+                    'placeholder' => '',
+                    'choice_label' => 'name',
+                    'choices' => $places,
+                ]);
+            }
+        );
+        */
+
 
     }
 
