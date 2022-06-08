@@ -17,6 +17,7 @@ class Trip
     private $id;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[Assert\NotBlank]
     #[Assert\Length(
         min: 2,
         max: 50,
@@ -26,6 +27,10 @@ class Trip
     private $name;
 
     #[ORM\Column(type: 'datetime')]
+    #[Assert\Range(
+        min: 'now',
+        max: '+1 years'
+    )]
     //#[Asserts\Date]
     private $dateStartHour;
 
@@ -33,6 +38,11 @@ class Trip
     private $duration;
 
     #[ORM\Column(type: 'date')]
+    /*
+    #[Assert\LessThan(
+        propertyPath: 'datetime', message: 'Il faut une date antérieur à la date de création de la sortie'
+    )]
+    */
     private $dateLimitRegistration;
 
     #[ORM\Column(type: 'integer', nullable: true)]

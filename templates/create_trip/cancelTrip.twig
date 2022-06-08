@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CreateTrip{% endblock %}
+
+{% block body %}
+
+
+    <h2>Annuler une sortie</h2>
+
+    {{form_start(cancelTrip)}}
+    {{form_widget(cancelTrip)}}
+    {{form_end(cancelTrip)}}
+
+{% endblock %}
