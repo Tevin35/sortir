@@ -29,13 +29,20 @@
                     <a class="{%if myRoute=='home' %} active{%endif%}" href="{{path('filter')}}" title="HomePage">Accueil</a>
                 </li>
                 <li>
+                    {% if app.user %}
                     <a class="{%if myRoute=='profile' %} active{%endif%}" href="{{path('app_participant_edit')}}" title="ManageProfil">Modifier mon profil</a>
+                    {% endif %}
                 </li>
                 <li>
                     <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="ParticipantList">Liste des participants</a>
                 </li>
                 <li>
+                    {% if app.user %}
                     <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_logout')}}" title="Logout">Déconnexion</a>
+                    {% else %}
+                        <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_login')}}" title="Login">Connexion</a>
+                    {% endif %}
+
                 </li>
 
     </ul>

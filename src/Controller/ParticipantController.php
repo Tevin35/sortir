@@ -21,6 +21,8 @@ class ParticipantController extends AbstractController
     #[Route('/', name: 'app_participant_index', methods: ['GET'])]
     public function index(ParticipantRepository $participantRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         return $this->render('participant/index.html.twig', [
             'participants' => $participantRepository->findAll(),
         ]);
@@ -29,6 +31,8 @@ class ParticipantController extends AbstractController
     #[Route('/new', name: 'app_participant_new', methods: ['GET', 'POST'])]
     public function new(Request $request, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository, FileUploader $fileUploader): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $participant = new Participant();
         $participant->setActive(true);
         $form = $this->createForm(ParticipantType::class, $participant);
@@ -63,6 +67,8 @@ class ParticipantController extends AbstractController
     #[Route('{id}', name: 'app_participant_show', methods: ['GET'])]
     public function show(Participant $participant): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         return $this->render('participant/show.html.twig', [
             'participant' => $participant,
         ]);
@@ -71,6 +77,8 @@ class ParticipantController extends AbstractController
     #[Route('/profile/edit', name: 'app_participant_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, UserPasswordHasherInterface $participantPasswordHasher, ParticipantRepository $participantRepository, FileUploader $fileUploader): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
          * @var Participant $user
@@ -114,6 +122,8 @@ class ParticipantController extends AbstractController
     #[Route('/{id}', name: 'app_participant_delete', methods: ['POST'])]
     public function delete(Request $request, Participant $participant, ParticipantRepository $participantRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         if ($this->isCsrfTokenValid('delete'.$participant->getId(), $request->request->get('_token'))) {
             $participantRepository->remove($participant, true);
         }

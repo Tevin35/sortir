@@ -19,6 +19,7 @@ class CreateTripController extends AbstractController
     #[Route('/create/trip', name: 'app_create_trip')]
     public function addTrip(TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $trip = new Trip();
 
@@ -75,6 +76,8 @@ class CreateTripController extends AbstractController
     #[Route('/update/trip/{id}', name: 'app_update_trip')]
     public function updateTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
 
@@ -118,7 +121,7 @@ class CreateTripController extends AbstractController
             if($tripForm->get('annuler')->isClicked()){
 
 
-                return $this->redirectToRoute('app_cancel_trip','trip.id');
+                return $this->redirectToRoute('app_cancel_trip',['id' => $trip->getId()]);
 
             }
 
@@ -138,15 +141,29 @@ class CreateTripController extends AbstractController
     #[Route('/cancel/trip/{id}', name: 'app_cancel_trip')]
     public function cancelTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
+        $tripDescription = $trip->getTripDescription();
+        dump($tripDescription);
 
-        $tripForm = $this->createForm(CancelTripType::class, $trip);
-        $tripForm->handleRequest($request);
+        $cancelForm = CancelTripType::class;
+        $form=$this->createForm($cancelForm);
+        $form->handleRequest($request);
 
-        if ($tripForm->isSubmitted() && $tripForm->isValid()){
+        //$cancelForm->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()){
+
+            $motif=$form['cancelMotif']->getData();
+            dump($motif);
+
+
             $state = $stateRepository->findOneBy(['stateCode'=>'CANC']);
-            $trip->setState($state);
+            $trip
+                ->setState($state)
+                ->setTripDescription($tripDescription . ' Motif d\'annulation : ' .$motif );
 
             $tripRepository->add($trip, true);
             $this->addFlash('success', 'Sortie annulée');
@@ -154,7 +171,7 @@ class CreateTripController extends AbstractController
         }
 
         return $this->render('create_trip/cancelTrip.twig',[
-            'cancelTrip'=>$tripForm->createView()
+            'cancelTrip'=>$form->createView()
         ]);
     }
 
@@ -165,6 +182,8 @@ class CreateTripController extends AbstractController
     #[Route('/display/trip/{id}', name: 'app_display_trip')]
     public function displayTrip($id, TripRepository $tripRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
 
