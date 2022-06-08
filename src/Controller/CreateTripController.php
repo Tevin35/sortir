@@ -77,7 +77,7 @@ class CreateTripController extends AbstractController
         $tripForm = $this -> CreateForm(CreateTripType::class, $trip);
         $tripForm -> handleRequest($request);
 
-        //suppression d'une sortie
+        //suppression d'une sortie avant publication
         if ($tripForm->isSubmitted()){
 
             if($tripForm->get('supprimer')->isClicked()){
@@ -95,6 +95,21 @@ class CreateTripController extends AbstractController
         ]);
     }
 
+    /*
+    #[Route('/cancel/trip/{id}', name: 'app_display_trip')]
+    public function displayTrip($id, TripRepository $tripRepository, Request $request): Response
+    {
+        //récupération de l'id d'une sortie
+        $trip = $tripRepository->find($id);
+
+        //récupération d'une liste de participants
+        $listParticipants = $trip->getRegisteredParticipants();
+        dump($listParticipants);
+
+        return $this->render('create_trip/displayTrip.twig', ['trip' => $trip]);
+    }
+    */
+
     #[Route('/display/trip/{id}', name: 'app_display_trip')]
     public function displayTrip($id, TripRepository $tripRepository, Request $request): Response
     {
@@ -107,6 +122,8 @@ class CreateTripController extends AbstractController
 
         return $this->render('create_trip/displayTrip.twig', ['trip' => $trip, 'listParticipants'=>$listParticipants]);
     }
+
+
 
 
 
