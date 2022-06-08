@@ -41,7 +41,7 @@ class FilterController extends AbstractController
         $listTrips = $tripRepository->findSearch($SearchData );
 
 
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $listTrips = $tripRepository->findSearch($SearchData);
 
         }

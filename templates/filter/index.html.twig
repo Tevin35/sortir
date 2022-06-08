@@ -34,8 +34,6 @@
     {{ form_end(filterForm) }}
 
 
-    <div id="table-wrapper">
-        <div id="table-scroll">
             <table class="tableau-style">
                 <thead>
                 <tr>
@@ -56,15 +54,16 @@
 
                         <tr>
                             <td>{{ trip.name }}</td>
-                            <td>{{ trip.dateStartHour|date('Y-m-d') }}</td>
-                            <td>{{ trip.dateLimitRegistration|date('Y-m-d') }}</td>
+                            <td>{{ trip.dateStartHour|format_datetime('short', 'short', locale='fr') }}</td>
+                            <td>{{ trip.dateLimitRegistration|format_datetime('short', 'none', locale='fr') }}</td>
                             <td> {{ trip.registeredParticipants|length }}/{{ trip.nbMaxRegistration }}</td>
                             <td>{{ trip.state.worded }}</td>
 
                             {#                app.user récupère l'utilisateur courant #}
                             <td>{% if app.user in trip.registeredParticipants %}
                                     X{% endif %}</td>
-                            <td>{{ trip.owner.pseudo }}</td>
+                            <td><a href="{{ path('app_participant_show',{'id':trip.owner.id}) }}">{{ trip.owner.pseudo }}</td>
+
 
                             <td>{% if app.user is same as(trip.owner) and trip.state.stateCode is same as('CREA') %}
                                     <p><a href="{{ path('app_update_trip',{'id':trip.id}) }}">Modifier</a> - <a href="{{ path('app_display_trip',{'id':trip.id}) }}">Publier</a></p>
@@ -101,6 +100,4 @@
                 {% endfor %}
                 </tbody>
             </table>
-        </div>
-    </div>
 {% endblock %}

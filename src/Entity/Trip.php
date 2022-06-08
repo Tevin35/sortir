@@ -43,11 +43,9 @@ class Trip
     private $duration;
 
     #[ORM\Column(type: 'date')]
-    /*
-    #[Assert\LessThan(
-        propertyPath: 'datetime', message: 'Il faut une date antérieur à la date de création de la sortie'
-    )]
-    */
+//    #[Assert\LessThan('', message: 'Il faut une date antérieur à la date de création de la sortie'
+//    )]
+
     private $dateLimitRegistration;
 
     #[ORM\Column(type: 'integer', nullable: true)]

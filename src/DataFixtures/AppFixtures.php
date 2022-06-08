@@ -157,7 +157,7 @@ class AppFixtures extends Fixture
         $states = $this->manager->getRepository(State::class)->findAll();
         $place = $this->manager->getRepository(Place::class)->findAll();
         $participant = $this->manager->getRepository(Participant::class)->findAll();
-        $randomDateLimitRegistration = $this->faker->dateTimeBetween('-30 days', '+30 days');
+
 
         for ($i = 0; $i <= 12; $i++) {
             $trip = new Trip();
