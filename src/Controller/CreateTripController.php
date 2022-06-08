@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Participant;
 use App\Entity\Trip;
+use App\Form\CancelTripType;
 use App\Form\CreateTripType;
 use App\Repository\StateRepository;
 use App\Repository\TripRepository;
@@ -57,6 +58,7 @@ class CreateTripController extends AbstractController
                 //->setCampus($this->getUser()->getCampus())
                 ->setState($state);
 
+            //envoie en BDD
             $tripRepository->add($trip, true);
             $this->addFlash("success", "Sortie Ajoutée");
             return $this->redirectToRoute("filter");
@@ -67,25 +69,59 @@ class CreateTripController extends AbstractController
         ]);
     }
 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
     #[Route('/update/trip/{id}', name: 'app_update_trip')]
-    public function updateTrip($id, TripRepository $tripRepository, Request $request): Response
+    public function updateTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
+
 
         //création d'un formulaire (On utilise le même formulaire: CreateTripType)
         $tripForm = $this -> CreateForm(CreateTripType::class, $trip);
         $tripForm -> handleRequest($request);
 
         //suppression d'une sortie avant publication
-        if ($tripForm->isSubmitted()){
+        if ($tripForm->isSubmitted() && $tripForm->isValid()){
+
+            //On conditionne la valeur de State en fonction du bouton qui a été cliqué
+            if($tripForm->get('enregistrer')->isClicked()){
+
+                //hydratation de la variable state avec un select qui renvoi tous les statecode IS CREA
+                $state = $stateRepository->findOneBy(['stateCode'=>'CREA']);
+                $trip->setState($state);
+                $tripRepository->add($trip, true);
+                $this->addFlash('success', 'Sortie enregistrée');
+                dump('CREA');
+            }
+
+            if($tripForm->get('publier')->isClicked()){
+
+                $state = $stateRepository->findOneBy(['stateCode'=>'OPEN']);
+                $trip->setState($state);
+                $tripRepository->add($trip, true);
+                $this->addFlash('success', 'Sortie publiée');
+                dump('OPEN');
+
+            }
 
             if($tripForm->get('supprimer')->isClicked()){
 
                 $tripRepository->remove($trip, true);
-                $this->addFlash("success", "Sortie Supprimée");
+                $this->addFlash('success', 'Sortie supprimée');
+                dump('supprimé');
 
             }
+
+            if($tripForm->get('annuler')->isClicked()){
+
+
+                return $this->redirectToRoute('app_cancel_trip','trip.id');
+
+            }
+
 
             return $this->redirectToRoute("filter");
         }
@@ -95,20 +131,36 @@ class CreateTripController extends AbstractController
         ]);
     }
 
-    /*
-    #[Route('/cancel/trip/{id}', name: 'app_display_trip')]
-    public function displayTrip($id, TripRepository $tripRepository, Request $request): Response
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    #[Route('/cancel/trip/{id}', name: 'app_cancel_trip')]
+    public function cancelTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
 
-        //récupération d'une liste de participants
-        $listParticipants = $trip->getRegisteredParticipants();
-        dump($listParticipants);
+        $tripForm = $this->createForm(CancelTripType::class, $trip);
+        $tripForm->handleRequest($request);
 
-        return $this->render('create_trip/displayTrip.twig', ['trip' => $trip]);
+        if ($tripForm->isSubmitted() && $tripForm->isValid()){
+            $state = $stateRepository->findOneBy(['stateCode'=>'CANC']);
+            $trip->setState($state);
+
+            $tripRepository->add($trip, true);
+            $this->addFlash('success', 'Sortie annulée');
+            return $this->redirectToRoute('filter');
+        }
+
+        return $this->render('create_trip/cancelTrip.twig',[
+            'cancelTrip'=>$tripForm->createView()
+        ]);
     }
-    */
+
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
 
     #[Route('/display/trip/{id}', name: 'app_display_trip')]
     public function displayTrip($id, TripRepository $tripRepository, Request $request): Response
@@ -122,11 +174,5 @@ class CreateTripController extends AbstractController
 
         return $this->render('create_trip/displayTrip.twig', ['trip' => $trip, 'listParticipants'=>$listParticipants]);
     }
-
-
-
-
-
-
 
 }

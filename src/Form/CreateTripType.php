@@ -93,7 +93,7 @@ class CreateTripType extends AbstractType
             ->add('enregistrer', SubmitType::class, ['label' => 'Enregistrer'])
             ->add('publier', SubmitType::class, ['label' => 'Publier'])
             ->add('supprimer', SubmitType::class, ['label' => 'Supprimer'])
-            ->add('annuler', ResetType::class, ['label' => 'Annuler']);
+            ->add('annuler', SubmitType::class, ['label' => 'Annuler']);
 
             /*
             $builder->addEventListener(

@@ -82,15 +82,16 @@ class TripRepository extends ServiceEntityRepository
     /**
      * Get the trips link with the search options check or type in fields
      */
-    public function findSearch(SearchData $searchData, State $state): array
+    public function findSearch(SearchData $searchData): array
     {
         $query = $this
             ->createQueryBuilder('t')
-            ->select('t, s, o, rp')
+            ->select('t', 's', 'o','rp')
             ->leftJoin('t.state', 's')
             ->leftJoin('t.owner', 'o')
             ->leftJoin('t.registeredParticipants','rp')
             ->andWhere("s.stateCode != 'HIST' ");
+
 
 
         if (!empty($searchData->getCampus())) {
@@ -143,7 +144,6 @@ class TripRepository extends ServiceEntityRepository
                 //MEMBER OF permet de chercher un membre parmi une collection de membre
                 ->andWhere("s.stateCode = 'CLOS' ");
                 // $this->participant c'est la valeur qu'on a défini comme variable tout en haut
-
         }
 
         $query = $query->orderBy('t.dateStartHour', 'DESC');

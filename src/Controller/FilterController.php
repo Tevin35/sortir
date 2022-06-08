@@ -24,7 +24,7 @@ class FilterController extends AbstractController
 
 
     #[Route('/filter', name: 'filter')]
-    public function index(TripRepository $tripRepository, Request $request, StateRepository $stateRepository): Response
+    public function index(TripRepository $tripRepository, Request $request): Response
     {
 
         //Pas besoin de getUser ici car on le place dans le constructeur du repository comme dans les fixtures au final
@@ -33,16 +33,16 @@ class FilterController extends AbstractController
 
         //Data initialization
         $SearchData = new SearchData();
-        $state = new State();
         $trip = new Trip();
 
         //Create form who use data
         $form = $this->createForm(FilterType::class, $SearchData);
         $form->handleRequest($request);
-        $listTrips = $tripRepository->findSearch($SearchData, $state);
+        $listTrips = $tripRepository->findSearch($SearchData );
+
 
         if ($form->isSubmitted()) {
-            $listTrips = $tripRepository->findSearch($SearchData, $state, );
+            $listTrips = $tripRepository->findSearch($SearchData);
 
         }
 
@@ -51,6 +51,7 @@ class FilterController extends AbstractController
             'listTrips' => $listTrips,
             'filterForm' => $form->createView()
         ]);
+
     }
 
 
@@ -78,8 +79,6 @@ class FilterController extends AbstractController
         $em->flush();
 
         return $this->redirectToRoute('filter');
-
-
     }
 
 

@@ -7,6 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\EventListener\Triplistener;
+
+
+/** @Trip @EntityListeners({"TripListener"}) */
+
 
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 class Trip
@@ -17,6 +22,7 @@ class Trip
     private $id;
 
     #[ORM\Column(type: 'string', length: 50)]
+    #[Assert\NotBlank]
     #[Assert\Length(
         min: 2,
         max: 50,
@@ -26,6 +32,10 @@ class Trip
     private $name;
 
     #[ORM\Column(type: 'datetime')]
+    #[Assert\Range(
+        min: 'now',
+        max: '+1 years'
+    )]
     //#[Asserts\Date]
     private $dateStartHour;
 
@@ -33,6 +43,11 @@ class Trip
     private $duration;
 
     #[ORM\Column(type: 'date')]
+    /*
+    #[Assert\LessThan(
+        propertyPath: 'datetime', message: 'Il faut une date antérieur à la date de création de la sortie'
+    )]
+    */
     private $dateLimitRegistration;
 
     #[ORM\Column(type: 'integer', nullable: true)]
@@ -49,7 +64,7 @@ class Trip
     #[ORM\JoinColumn(nullable: false)]
     private $place;
 
-    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'trips', fetch:'EAGER')]
+    #[ORM\ManyToOne(targetEntity: Campus::class, inversedBy: 'trips', fetch:'LAZY')]
     #[ORM\JoinColumn(nullable: false)]
     private $campus;
 
@@ -57,7 +72,7 @@ class Trip
     #[ORM\JoinColumn(nullable: false)]
     private $owner;
 
-    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'participantTrips', fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: Participant::class, inversedBy: 'participantTrips', fetch: 'LAZY')]
     private $registeredParticipants;
 
     public function __construct()
