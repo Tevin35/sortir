@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Consulter les sorties{% endblock %}
+{% block title %}{{ parent() }} Consulter les sorties{% endblock %}
 
 
 
@@ -10,7 +10,7 @@
         <br>
         Participant : {{ app.user.firstName }} {{app.user.lastName|first}}.
     {% endblock %}
-
+    <h2>Filtrer les sorties</h2>
 
     {{ form_start(filterForm) }}
 
@@ -57,7 +57,7 @@
 
                 <tr>
                     <td>{{ trip.name }}</td>
-                    <td>{{ trip.dateStartHour|date('Y-m-d') }}</td>
+                    <td>{{ trip.dateStartHour|date('Y-m-d H:i') }}</td>
                     <td>{{ trip.dateLimitRegistration|date('Y-m-d') }}</td>
                     <td> {{ trip.registeredParticipants|length }}/{{ trip.nbMaxRegistration }}</td>
                     <td>{{ trip.state.worded }}</td>
@@ -96,7 +96,6 @@
                         {% endif %}
 
                     </td>
-
 
                 </tr>
             {% endif %}

@@ -72,7 +72,6 @@ class CreateTripController extends AbstractController
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
     #[Route('/update/trip/{id}', name: 'app_update_trip')]
     public function updateTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
@@ -124,14 +123,13 @@ class CreateTripController extends AbstractController
                 return $this->redirectToRoute('app_cancel_trip',['id' => $trip->getId()]);
 
             }
-
-
             return $this->redirectToRoute("filter");
         }
 
         return $this->render('create_trip/updateTrip.twig', [
-            'createTrip' => $tripForm->createView()
+          'createTrip' => $tripForm->createView()
         ]);
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -164,7 +162,7 @@ class CreateTripController extends AbstractController
             $trip
                 ->setState($state)
                 ->setTripDescription($tripDescription . ' Motif d\'annulation : ' .$motif );
-
+            dump($trip);
             $tripRepository->add($trip, true);
             $this->addFlash('success', 'Sortie annulée');
             return $this->redirectToRoute('filter');

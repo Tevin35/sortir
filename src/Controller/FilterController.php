@@ -11,6 +11,7 @@ use App\Form\Model\SearchData;
 use App\Repository\CampusRepository;
 use App\Repository\StateRepository;
 use App\Repository\TripRepository;
+use App\Service\UpdateState;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,10 +25,11 @@ class FilterController extends AbstractController
 
 
     #[Route('/filter', name: 'filter')]
-    public function index(TripRepository $tripRepository, Request $request): Response
+    public function index(TripRepository $tripRepository, Request $request, UpdateState $updateState): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        $updateState->update();
 
         //Pas besoin de getUser ici car on le place dans le constructeur du repository comme dans les fixtures au final
         //On sera en revanche obligé de déclarer une variable avant.
@@ -70,7 +72,7 @@ class FilterController extends AbstractController
         $currentUser = $this->getUser();
 //        dd($currentUser);
         $trip = $tripRepository->find($id);
-        $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
+        //$state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->addRegisteredParticipant($currentUser);
 
         if (count($trip->getRegisteredParticipants()) === $trip->getNbMaxRegistration()) {
@@ -99,8 +101,9 @@ class FilterController extends AbstractController
         $currentUser = $this->getUser();
 //        dd($currentUser);
         $trip = $tripRepository->find($id);
-        $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
+        //$state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->removeRegisteredParticipant($currentUser);
+
 
         if (count($trip->getRegisteredParticipants()) < $trip->getNbMaxRegistration()) {
             $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);

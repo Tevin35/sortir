@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouveau participant{% endblock %}
+{% block title %}{{ parent() }} Nouveau participant{% endblock %}
 
 {% block body %}
     {% if is_granted('ROLE_ADMIN') %}
