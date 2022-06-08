@@ -3,9 +3,12 @@
 ************************************************************/
 body {
     margin: 0;
-    padding: 0;
-    background-color: lightgray;
-
+    /*background-color: lightgray;*/
+    background: linear-gradient(#000000, #132135);
+    background-attachment: fixed;
+    background-position: center center;
+    background-size: cover;
+    color: #FFFFFF;
     font-family: 'Hachi Maru Pop', cursive;
 }
 
@@ -18,7 +21,7 @@ body {
 
 a {
     text-decoration: none;
-    color: black;
+    color: #D3D3D3;
 }
 
 a:hover {
