@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta lang ="fr">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}Sortir!! -{% endblock %}</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     {% block stylesheets %}
@@ -30,11 +30,16 @@
                 </li>
                 <li>
                     {% if app.user %}
-                    <a class="{%if myRoute=='profile' %} active{%endif%}" href="{{path('app_participant_edit')}}" title="ManageProfil">Modifier mon profil</a>
+                    <a class="{%if myRoute=='profile' %} active{%endif%}" href="{{path('app_participant_edit')}}" title="ManageProfile">Modifier mon profil</a>
                     {% endif %}
                 </li>
                 <li>
                     <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="ParticipantList">Liste des participants</a>
+                </li>
+                <li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <a class="{%if myRoute=='place' %} active{%endif%}" href="{{path('app_place')}}" title="CreatePlace">Créer un lieu</a>
+                    {% endif %}
                 </li>
                 <li>
                     {% if app.user %}
@@ -42,7 +47,6 @@
                     {% else %}
                         <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_login')}}" title="Login">Connexion</a>
                     {% endif %}
-
                 </li>
 
     </ul>

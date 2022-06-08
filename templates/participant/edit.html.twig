@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="{{ asset('css/profile/profile.css') }}">
     {% endblock %}
 
-{% block title %}Éditer mon profil{% endblock %}
+{% block title %}{{ parent() }} Éditer mon profil {{ app.user.pseudo }}{% endblock %}
 
 
 {% block body %}
