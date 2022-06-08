@@ -70,7 +70,7 @@ class FilterController extends AbstractController
         $currentUser = $this->getUser();
 //        dd($currentUser);
         $trip = $tripRepository->find($id);
-        $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
+       // $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->addRegisteredParticipant($currentUser);
 
         if (count($trip->getRegisteredParticipants()) === $trip->getNbMaxRegistration()) {
@@ -99,17 +99,19 @@ class FilterController extends AbstractController
         $currentUser = $this->getUser();
 //        dd($currentUser);
         $trip = $tripRepository->find($id);
-        $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
+       // $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->removeRegisteredParticipant($currentUser);
 
-        if (count($trip->getRegisteredParticipants()) < $trip->getNbMaxRegistration()) {
+        if($trip->getState()->getStateCode() == 'CANC'){
+            $state = $stateRepository->findOneBy(['stateCode' => 'CANC']);
+        }
+        elseif (count($trip->getRegisteredParticipants()) < $trip->getNbMaxRegistration()) {
             $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         }
         $trip->setState($state);
 
 
         $em->persist($trip);
-//        $em->persist($state);
         $em->flush();
 
         return $this->redirectToRoute('filter');
