@@ -40,6 +40,7 @@ class FilterController extends AbstractController
         $form->handleRequest($request);
         $listTrips = $tripRepository->findSearch($SearchData );
 
+
         if ($form->isSubmitted()) {
             $listTrips = $tripRepository->findSearch($SearchData);
 
@@ -50,6 +51,7 @@ class FilterController extends AbstractController
             'listTrips' => $listTrips,
             'filterForm' => $form->createView()
         ]);
+
     }
 
 

@@ -20,16 +20,12 @@ class TripListener
         $this->stateRepository = $stateRepository;
     }
 
-
     /**
      * @param LifecycleEventArgs $args
      */
     public function postLoad(LifecycleEventArgs $args)
     {
-//       $state = $this->stateRepository->
-
         $entity = $args->getObject();
-        $state = $this->stateRepository->findOneBy(['stateCode']);
 
         if ($entity instanceof Trip) {
             //Date time du jour
@@ -39,32 +35,57 @@ class TripListener
             //Date, heure et minutes de la sortie
             $dateOfTrip = $entity->getDateStartHour();
 
+            $endOfTrip = $entity->getDateStartHour()->modify($entity->getDuration(). ' minutes');
 
-            if ($dateOfFenced >= $dateNow) {
+            $archiveOfTrip = $entity->getDateStartHour()->modify('1 month');
+
+
+//            if (($dateNow < $dateOfFenced)  && ($entity->getState()->getStateCode() != 'OPEN' &&  $entity->getState()->getStateCode() != 'CREA')) {
+//                $state = $this->stateRepository->findOneBy(['stateCode' => 'OPEN']);
+//                $entity->setState($state);
+//                $this->em->flush();
+//            }
+
+            if (($dateNow >= $dateOfFenced)  && ($entity->getState()->getStateCode() == 'OPEN')) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'FENC']);
                 $entity->setState($state);
                 $this->em->flush();
+            }
 
-            } elseif ($dateOfTrip >= $dateNow) {
+            elseif (($dateNow >= $dateOfTrip) && ($entity->getState()->getStateCode() == 'FENC')) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'PROG']);
                 $entity->setState($state);
                 $this->em->flush();
             }
+
+            elseif (($dateNow >= $endOfTrip) && ($entity->getState()->getStateCode() == 'PROG')){
+                $state = $this->stateRepository->findOneBy(['stateCode' => 'CLOS']);
+                $entity->setState($state);
+                $this->em->flush();
+            }
+
+            elseif ($dateNow >= $archiveOfTrip && ($entity->getState()->getStateCode() == 'CLOS' && $entity->getState()->getStateCode() == 'CANC')){
+                $state = $this->stateRepository->findOneBy(['stateCode' => 'HIST']);
+                $entity->setState($state);
+                $this->em->flush();
+            }
+
+
+
+
+
+
+
+
 //
-//            if ($dateNow-> $endOfTrip){
-//                $state = $this->stateRepository->findOneBy(['stateCode' => 'CLOS']);
-//                $entity->setState($state);
-//                $this->em->flush();
-//            }
-//
-//
-//            if ($dateOfTrip->modify('+ 1 month') >= $dateNow) {
-//                $state = $this->stateRepository->findOneBy(['stateCode' => 'HIST']);
-//                $entity->setState($state);
-//                $this->em->flush();
-//            }
-//        }
+
+
+
+
+
+
         }
 
     }
+
 }
