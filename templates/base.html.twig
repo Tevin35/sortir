@@ -22,8 +22,7 @@
 
     <nav>
         {%set myRoute = app.request.attributes.get('_route') %}
-        {#myRoute#}
-{#        {% block nav %}#}
+
             <ul>
                 <li>
                     <a class="{%if myRoute=='home' %} active{%endif%}" href="{{path('filter')}}" title="HomePage">Accueil</a>
@@ -36,21 +35,21 @@
                 <li>
                     <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="ParticipantList">Liste des participants</a>
                 </li>
-                <li>
+{#                <li>
                     {% if is_granted('ROLE_ADMIN') %}
                         <a class="{%if myRoute=='place' %} active{%endif%}" href="{{path('app_place')}}" title="CreatePlace">Créer un lieu</a>
                     {% endif %}
-                </li>
+                </li>#}
                 <li>
                     {% if app.user %}
-                    <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_logout')}}" title="Logout">Déconnexion</a>
+                    <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_logout')}}" title="Logout">Se déconnecter</a>
                     {% else %}
-                        <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_login')}}" title="Login">Connexion</a>
+                        <a class="{%if myRoute=='test' %} active{%endif%}" href="{{path('app_login')}}" title="Login">Se connecter</a>
                     {% endif %}
                 </li>
 
     </ul>
-    {#        {% endblock %}#}
+
 </nav>
 
 
