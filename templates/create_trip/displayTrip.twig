@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}CreateTrip{% endblock %}
+{% block title %}Sortie {{trip.name}}{% endblock %}
 
 {% block body %}
 
@@ -29,15 +29,15 @@
         <thead>
         <tr>
             <th>Pseudo</th>
-            <th>Nom</th>
+            <th>Nom et Prénom</th>
         </tr>
         </thead>
 
         <tbody>
         {%for item in listParticipants%}
             <tr>
-                <td>{{item.pseudo}}</td>
-                <td>{{item.firstName}} {{item.lastName}}</td>
+                <td><a href="{{ path('app_participant_show', {'id': item.id}) }}">{{item.pseudo}}</a></td>
+                <td><a href="{{ path('app_participant_show', {'id': item.id}) }}">{{item.firstName}} {{item.lastName}}</a></td>
             </tr>
         {%endfor%}
         </tbody>

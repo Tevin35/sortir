@@ -19,6 +19,7 @@ class CreateTripController extends AbstractController
     #[Route('/create/trip', name: 'app_create_trip')]
     public function addTrip(TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         $trip = new Trip();
 
@@ -75,6 +76,8 @@ class CreateTripController extends AbstractController
     #[Route('/update/trip/{id}', name: 'app_update_trip')]
     public function updateTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
 
@@ -138,6 +141,8 @@ class CreateTripController extends AbstractController
     #[Route('/cancel/trip/{id}', name: 'app_cancel_trip')]
     public function cancelTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
 
@@ -165,6 +170,8 @@ class CreateTripController extends AbstractController
     #[Route('/display/trip/{id}', name: 'app_display_trip')]
     public function displayTrip($id, TripRepository $tripRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
 

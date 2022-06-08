@@ -26,6 +26,8 @@ class FilterController extends AbstractController
     #[Route('/filter', name: 'filter')]
     public function index(TripRepository $tripRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
 
         //Pas besoin de getUser ici car on le place dans le constructeur du repository comme dans les fixtures au final
         //On sera en revanche obligé de déclarer une variable avant.
@@ -58,6 +60,8 @@ class FilterController extends AbstractController
     #[Route('/register/{id}', name: 'register')]
     public function register($id, TripRepository $tripRepository, Request $request, EntityManagerInterface $em, StateRepository $stateRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
          * @var Participant $currentUser
@@ -85,6 +89,8 @@ class FilterController extends AbstractController
     #[Route('/unsubscribe/{id}', name: 'unsubscribe')]
     public function unsubscribe($id, TripRepository $tripRepository, Request $request, EntityManagerInterface $em, StateRepository $stateRepository): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
          * @var Participant $currentUser

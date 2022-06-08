@@ -46,14 +46,14 @@ class FilterType extends AbstractType
 
             ])
             ->add('search', TextType::class, [
-                'label' => 'le nom de la sortie contient',
+                'label' => 'Le nom de la sortie contient :',
                 'required' => false,
                 'attr' => ['placeholder' => 'Search']
             ])
             ->add('startingDate', DateType::class, [
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
-                'label' => 'entre',
+                'label' => 'Entre',
                 'required' => false
 
             ])

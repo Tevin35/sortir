@@ -6,7 +6,9 @@
 
 {% block body %}
     {% block nav %}
-        Participant : {{ app.user.pseudo }}
+        Date du jour : {{ "now"|date("d/m/Y") }}
+        <br>
+        Participant : {{ app.user.firstName }} {{app.user.lastName|first}}.
     {% endblock %}
 
 

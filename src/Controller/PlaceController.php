@@ -16,6 +16,8 @@ class PlaceController extends AbstractController
     #[Route('/place', name: 'app_place')]
     public function createPlace(PlaceRepository $placeRepository, Request $request): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $place = new Place();
 
         /**
