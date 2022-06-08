@@ -57,7 +57,7 @@
 
                 <tr>
                     <td>{{ trip.name }}</td>
-                    <td>{{ trip.dateStartHour|date('Y-m-d') }}</td>
+                    <td>{{ trip.dateStartHour|date('Y-m-d H:i') }}</td>
                     <td>{{ trip.dateLimitRegistration|date('Y-m-d') }}</td>
                     <td> {{ trip.registeredParticipants|length }}/{{ trip.nbMaxRegistration }}</td>
                     <td>{{ trip.state.worded }}</td>

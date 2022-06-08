@@ -10,9 +10,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use App\EventListener\Triplistener;
 
 
-// @Trip @EntityListeners({"TripListener"})
-
-
 #[ORM\Entity(repositoryClass: TripRepository::class)]
 class Trip
 {
