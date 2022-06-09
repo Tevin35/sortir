@@ -13,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class UpdateState
 {
 
+
     private EntityManagerInterface $em;
     private StateRepository $stateRepository;
     private TripRepository $tripRepository;
@@ -96,6 +97,4 @@ class UpdateState
         $this->tripRepository->add($trip, true);
 
     }
-
-
 }
