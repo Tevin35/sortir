@@ -42,7 +42,7 @@ class UpdateState
 
 
 
-            $endOfTrip = clone $entity->getDateLimitRegistration();
+            $endOfTrip = clone $dateOfTrip;
             $endOfTrip->modify($entity->getDuration(). ' minutes');
 
             $archiveOfTrip = clone $dateOfTrip->modify('1 month');
@@ -54,13 +54,19 @@ class UpdateState
                 $this->em->flush();
             }
 
+            elseif($entity->getState()->getStateCode() == 'CANC'){
+                $state = $this->stateRepository->findOneBy(['stateCode' => 'CANC']);
+                $entity->setState($state);
+                $this->em->flush();
+            }
+
             elseif(($dateNow >= $endOfTrip) && ($entity->getState()->getStateCode() == 'PROG')){
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'CLOS']);
                 $entity->setState($state);
                 $this->em->flush();
             }
 
-            elseif ($dateNow >= $dateOfTrip && $entity->getState()->getStateCode() == 'FENC') {
+            elseif (($dateNow >= $dateOfTrip) && ($entity->getState()->getStateCode() == 'FENC')) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'PROG']);
                 $entity->setState($state);
                 $this->em->flush();
@@ -70,9 +76,7 @@ class UpdateState
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'FENC']);
                 $entity->setState($state);
                 $this->em->flush();
-            }
-
-            elseif(($dateNow < $dateOfFenced)  && ($entity->getState()->getStateCode() != 'OPEN' &&  $entity->getState()->getStateCode() != 'CREA')) {
+            } elseif (($dateNow < $dateOfFenced) && ($entity->getState()->getStateCode() != 'OPEN' && $entity->getState()->getStateCode() != 'CREA')) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'OPEN']);
                 $entity->setState($state);
                 $this->em->flush();
@@ -80,7 +84,22 @@ class UpdateState
 
 
         }
+
+
+
+
+
     }
+
+    public function published($id){
+        $trip = $this->tripRepository->find($id);
+        $state = $this->stateRepository->findOneBy(['stateCode' => 'OPEN']);
+        $trip->setState($state);
+        $this->tripRepository->add($trip, true);
+
+    }
+
+
 
 
 }

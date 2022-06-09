@@ -50,7 +50,6 @@ class FilterController extends AbstractController
 
         }
 
-
         return $this->render('filter/index.html.twig', [
             'listTrips' => $listTrips,
             'filterForm' => $form->createView()
@@ -74,7 +73,7 @@ class FilterController extends AbstractController
         $trip = $tripRepository->find($id);
         //$state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->addRegisteredParticipant($currentUser);
-
+        $state = $trip->getState();
         if (count($trip->getRegisteredParticipants()) === $trip->getNbMaxRegistration()) {
             $state = $stateRepository->findOneBy(['stateCode' => 'FENC']);
         }
@@ -99,12 +98,11 @@ class FilterController extends AbstractController
          */
 
         $currentUser = $this->getUser();
-//        dd($currentUser);
+
         $trip = $tripRepository->find($id);
         //$state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->removeRegisteredParticipant($currentUser);
-
-
+        $state = $trip->getState();
         if (count($trip->getRegisteredParticipants()) < $trip->getNbMaxRegistration()) {
             $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         }

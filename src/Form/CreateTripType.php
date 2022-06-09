@@ -31,13 +31,13 @@ class CreateTripType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class, [
+            ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class,[
                 'label' => "Nom de la sortie*",
                 'attr' => [
                     'autofocus required placeholder' => "Nom de la sortie*"
                 ]
             ])
-            ->add('dateStartHour', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class, [
+            ->add('dateStartHour', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class,[
                 'label' => "Date et heure de la sortie*",
                 'html5' => true,
                 'time_widget' => 'single_text',
@@ -47,7 +47,7 @@ class CreateTripType extends AbstractType
 //                    'required placeholder' => "Date et heure de la sortie",
 //                ]
             ])
-            ->add('dateLimitRegistration', DateType::class, [
+            ->add('dateLimitRegistration',DateType::class,[
                 'label' => "Date limite d'inscription*",
                 'widget' => 'single_text',
                 'format' => 'yyyy-MM-dd',
