@@ -39,7 +39,7 @@
                 </li>
                 <li>
                     {% if is_granted('ROLE_ADMIN') %}
-                    <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="ParticipantList">Liste des participants</a>
+                    <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="UserList">Liste des utilisateurs</a>
                     {% endif %}
                 </li>
 {#                <li>

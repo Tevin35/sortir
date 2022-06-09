@@ -39,20 +39,17 @@ class CreateTripController extends AbstractController
 
         //traitement du formulaire
         if ($tripForm->isSubmitted() && $tripForm->isValid()) {
-            dump('la');
 
             //On conditionne la valeur de State en fonction du bouton qui a été cliqué
             if ($tripForm->get('enregistrer')->isClicked()) {
 
                 //hydratation de la variable state avec un select qui renvoi tous les statecode IS CREA
                 $state = $stateRepository->findOneBy(['stateCode' => 'CREA']);
-                dump('CREA');
             }
 
             if ($tripForm->get('publier')->isClicked()) {
 
                 $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
-                dump('OPEN');
 
             }
 
@@ -115,7 +112,6 @@ class CreateTripController extends AbstractController
 
                 $tripRepository->remove($trip, true);
                 $this->addFlash('success', 'Sortie supprimée');
-                dump('supprimé');
 
             }
 
@@ -164,7 +160,6 @@ class CreateTripController extends AbstractController
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
         $tripDescription = $trip->getTripDescription();
-        dump($tripDescription);
 
         $cancelForm = CancelTripType::class;
         $form = $this->createForm($cancelForm);
@@ -175,14 +170,12 @@ class CreateTripController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $motif = $form['cancelMotif']->getData();
-            dump($motif);
 
 
             $state = $stateRepository->findOneBy(['stateCode' => 'CANC']);
             $trip
                 ->setState($state)
                 ->setTripDescription($tripDescription . ' Motif d\'annulation : ' . $motif);
-            dump($trip);
             $tripRepository->add($trip, true);
             $this->addFlash('success', 'Sortie annulée');
             return $this->redirectToRoute('filter');
@@ -207,7 +200,6 @@ class CreateTripController extends AbstractController
 
         //récupération d'une liste de participants
         $listParticipants = $trip->getRegisteredParticipants();
-        dump($listParticipants);
 
         return $this->render('create_trip/displayTrip.twig', ['trip' => $trip, 'listParticipants' => $listParticipants]);
     }
