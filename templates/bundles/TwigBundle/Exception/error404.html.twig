@@ -2,10 +2,10 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Page pas trouvée</h1>
+    <h1>Page non trouvée</h1>
 
     <p>
-        The requested page couldn't be located. Checkout for any URL
-        misspelling or <a href="{{ path('filter') }}">return to the homepage</a>.
+        La page n'a pas pu être trouvée.
     </p>
+    <a href="{{ path('filter') }}">Retour à l'accueil</a>.
 {% endblock %}
