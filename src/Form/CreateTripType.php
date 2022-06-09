@@ -34,7 +34,8 @@ class CreateTripType extends AbstractType
             ->add('name', \Symfony\Component\Form\Extension\Core\Type\TextType::class,[
                 'label' => "Nom de la sortie*",
                 'attr' => [
-                    'autofocus required placeholder' => "Nom de la sortie*"
+                    'autofocus required placeholder' => "Nom de la sortie*",
+
                 ]
             ])
             ->add('dateStartHour', \Symfony\Component\Form\Extension\Core\Type\DateTimeType::class,[
@@ -42,10 +43,6 @@ class CreateTripType extends AbstractType
                 'html5' => true,
                 'time_widget' => 'single_text',
                 'date_widget' => 'single_text',
-
-//                'attr' => [
-//                    'required placeholder' => "Date et heure de la sortie",
-//                ]
             ])
             ->add('dateLimitRegistration',DateType::class,[
                 'label' => "Date limite d'inscription*",

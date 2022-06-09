@@ -6,60 +6,58 @@
 
 {% block body %}
     {% block nav %}
-        Date du jour : {{ "now"|date("d/m/Y") }}
-        <br>
-        Participant : {{ app.user.firstName }} {{ app.user.lastName|first }}.
+
+        <div class="dateEtParticipant">
+            Date du jour : {{ "now"|date("d/m/Y") }}
+            <br>
+            Participant : {{ app.user.firstName }} {{ app.user.lastName|first }}.
+
+        </div>
+
+
     {% endblock %}
 
+    <h2>Filtrer les sorties</h2>
 
     <div class="filterContainer">
 
-        <div>
-
-            <h2>Filtrer les sorties</h2>
+        <div class="filterConf">
 
             {{ form_start(filterForm) }}
-
             {{ form_row(filterForm.campus) }}
             {{ form_row(filterForm.search) }}
             {{ form_row(filterForm.startingDate) }}
             {{ form_row(filterForm.endingDate) }}
-
         </div>
 
-        <div class="filterBox">
+        <div class="filterBoxContainer">
+            <div class="filterBox">
+                {{ form_widget(filterForm.ownerTrip) }}
+                {{ form_label(filterForm.ownerTrip) }}
+            </div>
 
-            {{ form_widget(filterForm.ownerTrip) }}
-            {{ form_label(filterForm.ownerTrip) }}
+            <div class="filterBox">
+                {{ form_widget(filterForm.registerTrip) }}
+                {{ form_label(filterForm.registerTrip) }}
+            </div>
 
-            {{ form_widget(filterForm.registerTrip) }}
-            {{ form_label(filterForm.registerTrip) }}
+            <div class="filterBox">
+                {{ form_widget(filterForm.unsuscribeTrip) }}
+                {{ form_label(filterForm.unsuscribeTrip) }}
+            </div>
 
-
-            {{ form_widget(filterForm.unsuscribeTrip) }}
-            {{ form_label(filterForm.unsuscribeTrip) }}
-
-            {{ form_widget(filterForm.pastTrip) }}
-            {{ form_label(filterForm.pastTrip) }}
-
+            <div class="filterBox">
+                {{ form_widget(filterForm.pastTrip) }}
+                {{ form_label(filterForm.pastTrip) }}
+            </div>
         </div>
 
         <div>
-
             <button type="submit" name="search" class="search">Rechercher</button>
             {{ form_end(filterForm) }}
-
-
-
         </div>
 
-
-
     </div>
-
-
-
-
 
     <table class="tableau-style">
         <thead>

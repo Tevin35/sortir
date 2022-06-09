@@ -7,24 +7,49 @@
 
     <h2>Créer une sortie</h2>
 
-    {{ form_start(createTrip) }}
+    <div class="tripContainer">
 
-    {{ form_row(createTrip.name) }}
-    {{ form_row(createTrip.dateStartHour) }}
-    {{ form_row(createTrip.dateLimitRegistration) }}
-    {{ form_row(createTrip.nbMaxRegistration) }}
-    {{ form_row(createTrip.duration) }}
-    {{ form_row(createTrip.tripDescription) }}
-    {{ form_row(createTrip.campus) }}
-    {{ form_row(createTrip.ville) }}
-    {{ form_row(createTrip.place) }}
-    <a href="{{ path('app_place') }}">{{ form_row(createTrip.plus) }}</a>
+        <div class="tripForm">
 
-    {{ form_row(createTrip.enregistrer) }}
-    {{ form_row(createTrip.publier) }}
-    {{ form_row(createTrip.supprimer) }}
-    {{ form_row(createTrip.annuler) }}
+            {{ form_start(createTrip) }}
 
-    {{ form_end(createTrip) }}
+            {{ form_row(createTrip.name) }}
+            {{ form_row(createTrip.dateStartHour) }}
+            {{ form_row(createTrip.dateLimitRegistration) }}
+            {{ form_row(createTrip.nbMaxRegistration) }}
+            {{ form_row(createTrip.duration) }}
+            {{ form_row(createTrip.tripDescription) }}
+
+
+
+        </div>
+
+        <div class="tripForm">
+
+            {{ form_row(createTrip.campus) }}
+            {{ form_row(createTrip.ville) }}
+
+            <div class="placePlus">
+                {{ form_row(createTrip.place) }}
+                <a href="{{ path('app_place') }}">{{ form_row(createTrip.plus) }}</a>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <div class="tripButtonContainer">
+
+        {{ form_row(createTrip.enregistrer) }}
+        {{ form_row(createTrip.publier) }}
+        {{ form_row(createTrip.supprimer) }}
+        {{ form_row(createTrip.annuler) }}
+
+        {{ form_end(createTrip) }}
+
+    </div>
 
 {% endblock %}

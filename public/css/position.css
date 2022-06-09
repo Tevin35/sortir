@@ -1,5 +1,74 @@
+
+/*
+    Page d'accueil
+ */
+
+.dateEtParticipant{
+    display: flex;
+    justify-content: right;
+
+}
+
 .filterContainer{
 
     display: flex;
+    justify-content: space-between;
+    align-items: end;
 
 }
+
+.filterBoxContainer{
+    border: solid 2px cornflowerblue;
+    background-color: lightgray;
+    padding: 30px;
+    height: 100%;
+}
+
+.filterBox{
+    display: flex;
+    padding: 5px;
+}
+
+.filterConf{
+    display: flex;
+    flex-direction: column;
+    border: solid 2px cornflowerblue;
+    background-color: lightgray;
+    padding: 30px;
+}
+
+/*
+    Créer une sortie
+ */
+
+.tripContainer{
+    display: flex;
+    justify-content: center;
+
+}
+
+.tripForm{
+    padding: 0 40px;
+}
+
+.tripButtonContainer{
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.tripButtonContainer button{
+    padding: 15px;
+    margin: 15px;
+}
+
+#create_trip_dateStartHour_time{
+    width: 50px;
+}
+
+.placePlus{
+    display: flex;
+    align-items: end;
+}
+
+
