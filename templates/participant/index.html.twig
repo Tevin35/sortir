@@ -50,9 +50,6 @@
                 {% endif %}
                 <td>
                     <a href="{{ path('app_participant_show', {'id': participant.id}) }}">Afficher le profil</a>
-{#                    {% if is_granted('ROLE_ADMIN') %}
-                    <a href="{{ path('app_participant_edit', {'id': participant.id}) }}">Éditer le profil</a>
-                    {% endif %}#}
                 </td>
             </tr>
         {% else %}

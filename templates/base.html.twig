@@ -28,11 +28,18 @@
                 </li>
                 <li>
                     {% if app.user %}
+                        <a class="{%if myRoute=='profile' %} active{%endif%}" href="{{path('app_participant_show', {'id': app.user.id})}}" title="ShowProfile">Afficher mon profil</a>
+                    {% endif %}
+                </li>
+                <li>
+                    {% if app.user %}
                     <a class="{%if myRoute=='profile' %} active{%endif%}" href="{{path('app_participant_edit')}}" title="ManageProfile">Modifier mon profil</a>
                     {% endif %}
                 </li>
                 <li>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a class="{%if myRoute=='participant' %} active{%endif%}" href="{{path('app_participant_index')}}" title="ParticipantList">Liste des participants</a>
+                    {% endif %}
                 </li>
 {#                <li>
                     {% if is_granted('ROLE_ADMIN') %}
