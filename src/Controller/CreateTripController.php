@@ -16,6 +16,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use function PHPUnit\Framework\throwException;
 
 class CreateTripController extends AbstractController
 {
@@ -78,71 +79,110 @@ class CreateTripController extends AbstractController
     #[Route('/update/trip/{id}', name: 'app_update_trip')]
     public function updateTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
+        /**
+         * pour avoir l'autocomplétion de tous les attributs de Participant
+         * @var Participant $user;
+         */
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
 
-        //création d'un formulaire (On utilise le même formulaire: CreateTripType)
-        $tripForm = $this->CreateForm(CreateTripType::class, $trip);
-        $tripForm->handleRequest($request);
-
-        //suppression d'une sortie avant publication
-        if ($tripForm->isSubmitted() && $tripForm->isValid()) {
-
-            //On conditionne la valeur de State en fonction du bouton qui a été cliqué
-            if ($tripForm->get('enregistrer')->isClicked()) {
-
-                //hydratation de la variable state avec un select qui renvoi tous les statecode IS CREA
-                $state = $stateRepository->findOneBy(['stateCode' => 'CREA']);
-                $trip->setState($state);
-                $tripRepository->add($trip, true);
-                $this->addFlash('success', 'Sortie enregistrée');
-
-            }
-
-            if ($tripForm->get('publier')->isClicked()) {
-
-                $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
-                $trip->setState($state);
-                $tripRepository->add($trip, true);
-                $this->addFlash('success', 'Sortie publiée');
-
-
-            }
-
-            if ($tripForm->get('supprimer')->isClicked()) {
-
-                $tripRepository->remove($trip, true);
-                $this->addFlash('success', 'Sortie supprimée');
-                dump('supprimé');
-
-            }
-
-            if ($tripForm->get('annuler')->isClicked()) {
-
-
-                return $this->redirectToRoute('app_cancel_trip', ['id' => $trip->getId()]);
-
-            }
-            return $this->redirectToRoute("filter");
+        if($trip==null) {
+            throw $this->createNotFoundException('La sortie que vous cherchez n\'existe pas ');
         }
 
-        return $this->render('create_trip/updateTrip.twig', [
-            'trip' => $trip,
-            'createTrip' => $tripForm->createView()
-        ]);
+        $user = $this->getUser();
 
-    }
+        if($user != $trip->getOwner()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier les données correspondant à un autre utilisateur, jeune gredin ! ');
+        }
+
+
+
+
+
+            //création d'un formulaire (On utilise le même formulaire: CreateTripType)
+            $tripForm = $this->CreateForm(CreateTripType::class, $trip);
+            $tripForm->handleRequest($request);
+
+            //suppression d'une sortie avant publication
+            if ($tripForm->isSubmitted() && $tripForm->isValid()) {
+
+                //On conditionne la valeur de State en fonction du bouton qui a été cliqué
+                if ($tripForm->get('enregistrer')->isClicked()) {
+
+                    //hydratation de la variable state avec un select qui renvoi tous les statecode IS CREA
+                    $state = $stateRepository->findOneBy(['stateCode' => 'CREA']);
+                    $trip->setState($state);
+                    $tripRepository->add($trip, true);
+                    $this->addFlash('success', 'Sortie enregistrée');
+
+                }
+
+                if ($tripForm->get('publier')->isClicked()) {
+
+                    $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
+                    $trip->setState($state);
+                    $tripRepository->add($trip, true);
+                    $this->addFlash('success', 'Sortie publiée');
+
+
+                }
+
+                if ($tripForm->get('supprimer')->isClicked()) {
+
+                    $tripRepository->remove($trip, true);
+                    $this->addFlash('success', 'Sortie supprimée');
+                    dump('supprimé');
+
+                }
+
+                if ($tripForm->get('annuler')->isClicked()) {
+
+
+                    return $this->redirectToRoute('app_cancel_trip', ['id' => $trip->getId()]);
+
+                }
+                return $this->redirectToRoute("filter");
+            }
+
+            return $this->render('create_trip/updateTrip.twig', [
+                'trip' => $trip,
+                'createTrip' => $tripForm->createView()
+            ]);
+
+        }
+
+
 
     //////////////////////////////////////////// FLO - BOUTON PUBLIER PAGE D'ACCUEIL ///////////////////////////////////////////////////
 
     #[Route('/published/trip/{id}', name: 'app_published_trip')]
     public function published($id, TripRepository $tripRepository, Request $request, UpdateState $published): Response
     {
+
+        /**
+         * pour avoir l'autocomplétion de tous les attributs de Participant
+         * @var Participant $user;
+         */
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
+        //récupération de l'id d'une sortie
+        $trip = $tripRepository->find($id);
+
+        if($trip==null) {
+            throw $this->createNotFoundException('La sortie que vous cherchez n\'existe pas ');
+        }
+
+        $user = $this->getUser();
+
+        if($user != $trip->getOwner()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier les données correspondant à un autre utilisateur, jeune gredin ! ');
+        }
+
         $published->published($id);
+
 
         //Pas besoin de getUser ici car on le place dans le constructeur du repository comme dans les fixtures au final
         //On sera en revanche obligé de déclarer une variable avant.
@@ -159,10 +199,26 @@ class CreateTripController extends AbstractController
     #[Route('/cancel/trip/{id}', name: 'app_cancel_trip')]
     public function cancelTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
+        /**
+         * pour avoir l'autocomplétion de tous les attributs de Participant
+         * @var Participant $user;
+         */
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
+
+        if($trip==null) {
+            throw $this->createNotFoundException('La sortie que vous cherchez n\'existe pas ');
+        }
+
+        $user = $this->getUser();
+
+        if($user != $trip->getOwner()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier les données correspondant à un autre utilisateur, jeune gredin ! ');
+        }
+
+
         $tripDescription = $trip->getTripDescription();
         dump($tripDescription);
 

@@ -42,7 +42,7 @@ class FilterController extends AbstractController
         //Create form who use data
         $form = $this->createForm(FilterType::class, $SearchData);
         $form->handleRequest($request);
-        $listTrips = $tripRepository->findSearch($SearchData );
+        $listTrips = $tripRepository->findSearch($SearchData);
 
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -61,25 +61,35 @@ class FilterController extends AbstractController
     #[Route('/register/{id}', name: 'register')]
     public function register($id, TripRepository $tripRepository, Request $request, EntityManagerInterface $em, StateRepository $stateRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
-         * @var Participant $currentUser
+         * @var Participant $user ;
          */
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $currentUser = $this->getUser();
-//        dd($currentUser);
+        //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
-        //$state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
-        $trip->addRegisteredParticipant($currentUser);
+
+        if ($trip == null) {
+            throw $this->createNotFoundException('La sortie que vous cherchez n\'existe pas ');
+        }
+
+        $user = $this->getUser();
+
+        if ($user != $trip->getOwner()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier les données correspondant à un autre utilisateur, jeune gredin ! ');
+        }
+
+
+        $trip->addRegisteredParticipant($user);
         $state = $trip->getState();
+
         if (count($trip->getRegisteredParticipants()) === $trip->getNbMaxRegistration()) {
             $state = $stateRepository->findOneBy(['stateCode' => 'FENC']);
         }
         $trip->setState($state);
 
-//        $em->persist($state);
+
         $em->persist($trip);
         $em->flush();
 
@@ -90,18 +100,27 @@ class FilterController extends AbstractController
     #[Route('/unsubscribe/{id}', name: 'unsubscribe')]
     public function unsubscribe($id, TripRepository $tripRepository, Request $request, EntityManagerInterface $em, StateRepository $stateRepository): Response
     {
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         /**
          * pour avoir l'autocomplétion de tous les attributs de Participant
-         * @var Participant $currentUser
+         * @var Participant $user ;
          */
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
-        $currentUser = $this->getUser();
-
+        //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
+
+        if ($trip == null) {
+            throw $this->createNotFoundException('La sortie que vous cherchez n\'existe pas ');
+        }
+
+        $user = $this->getUser();
+
+        if ($user != $trip->getOwner()) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier les données correspondant à un autre utilisateur, jeune gredin ! ');
+        }
+
         //$state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
-        $trip->removeRegisteredParticipant($currentUser);
+        $trip->removeRegisteredParticipant($user);
         $state = $trip->getState();
         if (count($trip->getRegisteredParticipants()) < $trip->getNbMaxRegistration()) {
             $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);

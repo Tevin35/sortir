@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+
 /***********************************************************
 * Styles Globals
 ************************************************************/
@@ -9,7 +11,7 @@ body {
     background-position: center center;
     background-size: cover;
     color: #FFFFFF;
-    font-family: 'Hachi Maru Pop', cursive;
+    font-family: 'Audiowide', cursive;
 }
 
 .container {
