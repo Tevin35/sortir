@@ -6,8 +6,11 @@ use App\Entity\Participant;
 use App\Entity\Trip;
 use App\Form\CancelTripType;
 use App\Form\CreateTripType;
+use App\Form\FilterType;
+use App\Form\Model\SearchData;
 use App\Repository\StateRepository;
 use App\Repository\TripRepository;
+use App\Service\UpdateState;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,25 +33,25 @@ class CreateTripController extends AbstractController
         $user = $this->getUser();
 
         //création d'un formulaire
-        $tripForm = $this -> CreateForm(CreateTripType::class, $trip);
-        $tripForm -> handleRequest($request);
-        dump('ici');
+        $tripForm = $this->CreateForm(CreateTripType::class, $trip);
+        $tripForm->handleRequest($request);
+
 
         //traitement du formulaire
-        if($tripForm -> isSubmitted() && $tripForm->isValid()){
+        if ($tripForm->isSubmitted() && $tripForm->isValid()) {
             dump('la');
 
             //On conditionne la valeur de State en fonction du bouton qui a été cliqué
-            if($tripForm->get('enregistrer')->isClicked()){
+            if ($tripForm->get('enregistrer')->isClicked()) {
 
                 //hydratation de la variable state avec un select qui renvoi tous les statecode IS CREA
-                $state = $stateRepository->findOneBy(['stateCode'=>'CREA']);
+                $state = $stateRepository->findOneBy(['stateCode' => 'CREA']);
                 dump('CREA');
             }
 
-            if($tripForm->get('publier')->isClicked()){
+            if ($tripForm->get('publier')->isClicked()) {
 
-                $state = $stateRepository->findOneBy(['stateCode'=>'OPEN']);
+                $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
                 dump('OPEN');
 
             }
@@ -72,7 +75,6 @@ class CreateTripController extends AbstractController
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
 
-
     #[Route('/update/trip/{id}', name: 'app_update_trip')]
     public function updateTrip($id, TripRepository $tripRepository, StateRepository $stateRepository, Request $request): Response
     {
@@ -81,36 +83,35 @@ class CreateTripController extends AbstractController
         //récupération de l'id d'une sortie
         $trip = $tripRepository->find($id);
 
-
         //création d'un formulaire (On utilise le même formulaire: CreateTripType)
-        $tripForm = $this -> CreateForm(CreateTripType::class, $trip);
-        $tripForm -> handleRequest($request);
+        $tripForm = $this->CreateForm(CreateTripType::class, $trip);
+        $tripForm->handleRequest($request);
 
         //suppression d'une sortie avant publication
-        if ($tripForm->isSubmitted() && $tripForm->isValid()){
+        if ($tripForm->isSubmitted() && $tripForm->isValid()) {
 
             //On conditionne la valeur de State en fonction du bouton qui a été cliqué
-            if($tripForm->get('enregistrer')->isClicked()){
+            if ($tripForm->get('enregistrer')->isClicked()) {
 
                 //hydratation de la variable state avec un select qui renvoi tous les statecode IS CREA
-                $state = $stateRepository->findOneBy(['stateCode'=>'CREA']);
+                $state = $stateRepository->findOneBy(['stateCode' => 'CREA']);
                 $trip->setState($state);
                 $tripRepository->add($trip, true);
                 $this->addFlash('success', 'Sortie enregistrée');
-                dump('CREA');
+
             }
 
-            if($tripForm->get('publier')->isClicked()){
+            if ($tripForm->get('publier')->isClicked()) {
 
-                $state = $stateRepository->findOneBy(['stateCode'=>'OPEN']);
+                $state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
                 $trip->setState($state);
                 $tripRepository->add($trip, true);
                 $this->addFlash('success', 'Sortie publiée');
-                dump('OPEN');
+
 
             }
 
-            if($tripForm->get('supprimer')->isClicked()){
+            if ($tripForm->get('supprimer')->isClicked()) {
 
                 $tripRepository->remove($trip, true);
                 $this->addFlash('success', 'Sortie supprimée');
@@ -118,24 +119,41 @@ class CreateTripController extends AbstractController
 
             }
 
-            if($tripForm->get('annuler')->isClicked()){
+            if ($tripForm->get('annuler')->isClicked()) {
 
 
-                return $this->redirectToRoute('app_cancel_trip',['id' => $trip->getId()]);
+                return $this->redirectToRoute('app_cancel_trip', ['id' => $trip->getId()]);
 
             }
-
-
             return $this->redirectToRoute("filter");
         }
 
         return $this->render('create_trip/updateTrip.twig', [
+            'trip' => $trip,
             'createTrip' => $tripForm->createView()
         ]);
+
+    }
+
+    //////////////////////////////////////////// FLO - BOUTON PUBLIER PAGE D'ACCUEIL ///////////////////////////////////////////////////
+
+    #[Route('/published/trip/{id}', name: 'app_published_trip')]
+    public function published($id, TripRepository $tripRepository, Request $request, UpdateState $published): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
+        $published->published($id);
+
+        //Pas besoin de getUser ici car on le place dans le constructeur du repository comme dans les fixtures au final
+        //On sera en revanche obligé de déclarer une variable avant.
+        $this->addFlash('success', 'Sortie publiée');
+
+
+        return $this->redirectToRoute("filter");
+
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
     #[Route('/cancel/trip/{id}', name: 'app_cancel_trip')]
@@ -149,29 +167,29 @@ class CreateTripController extends AbstractController
         dump($tripDescription);
 
         $cancelForm = CancelTripType::class;
-        $form=$this->createForm($cancelForm);
+        $form = $this->createForm($cancelForm);
         $form->handleRequest($request);
 
         //$cancelForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()){
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            $motif=$form['cancelMotif']->getData();
+            $motif = $form['cancelMotif']->getData();
             dump($motif);
 
 
-            $state = $stateRepository->findOneBy(['stateCode'=>'CANC']);
+            $state = $stateRepository->findOneBy(['stateCode' => 'CANC']);
             $trip
                 ->setState($state)
-                ->setTripDescription($tripDescription . ' Motif d\'annulation : ' .$motif );
+                ->setTripDescription($tripDescription . ' Motif d\'annulation : ' . $motif);
             dump($trip);
             $tripRepository->add($trip, true);
             $this->addFlash('success', 'Sortie annulée');
             return $this->redirectToRoute('filter');
         }
 
-        return $this->render('create_trip/cancelTrip.twig',[
-            'cancelTrip'=>$form->createView()
+        return $this->render('create_trip/cancelTrip.twig', [
+            'cancelTrip' => $form->createView()
         ]);
     }
 
@@ -191,7 +209,7 @@ class CreateTripController extends AbstractController
         $listParticipants = $trip->getRegisteredParticipants();
         dump($listParticipants);
 
-        return $this->render('create_trip/displayTrip.twig', ['trip' => $trip, 'listParticipants'=>$listParticipants]);
+        return $this->render('create_trip/displayTrip.twig', ['trip' => $trip, 'listParticipants' => $listParticipants]);
     }
 
 }
