@@ -10,7 +10,10 @@
 {% block body %}
 
     <h1>Éditer mon profil</h1>
-    <img class="displayed" src="{{ asset('uploads/brochures/' ~ app.user.brochureFilename)}}" alt="Image de profil" width="300" height="300">
+
+    <div class="imgProfil">
+        <img class="displayed" src="{{ asset('uploads/brochures/' ~ app.user.brochureFilename)}}" alt="Image de profil">
+    </div>
 
     {{ include('participant/_form.html.twig', {'button_label': 'Mettre à jour'}) }}
 {#    Donne un bug. Pour le moment, on ne peut pas supprimer d'utilisateurs.

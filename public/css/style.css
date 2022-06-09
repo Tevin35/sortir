@@ -29,9 +29,9 @@ a:hover {
     cursor: pointer;
 }
 
-/*img {
-    max-width: 100%;
-}*/
+img {
+    width: 100%;
+}
 
 body > .container {
     display: flex;
@@ -145,6 +145,11 @@ th {
     margin-right: 5px;
 }
 
+.nav{
+    display: flex;
+    justify-content: space-between;
+}
+
 
 nav ul {
     margin: 5px 0;
@@ -163,6 +168,11 @@ nav a {
 
 .active {
     color: red;
+}
+
+.logo{
+    width: 100px;
+    margin-left: 20px;
 }
 
 /***********************************************************
@@ -204,5 +214,14 @@ footer {
 ************************************************************/
 label {
     display: block;
+}
+
+/***********************************************************
+Participant
+************************************************************/
+
+.imgProfil{
+    width: 300px;
+    margin: 0 auto;
 }
 

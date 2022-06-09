@@ -18,9 +18,9 @@
 }
 
 .filterBoxContainer{
-    border: solid 2px cornflowerblue;
     background-color: lightgray;
     padding: 30px;
+
     height: 100%;
 }
 
@@ -32,9 +32,10 @@
 .filterConf{
     display: flex;
     flex-direction: column;
-    border: solid 2px cornflowerblue;
     background-color: lightgray;
     padding: 30px;
+
+
 }
 
 /*

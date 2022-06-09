@@ -98,15 +98,10 @@ class CreateTripController extends AbstractController
             throw $this->createAccessDeniedException('Vous ne pouvez pas modifier les données correspondant à un autre utilisateur, jeune gredin ! ');
         }
 
-
-
-
-
             //création d'un formulaire (On utilise le même formulaire: CreateTripType)
             $tripForm = $this->CreateForm(CreateTripType::class, $trip);
             $tripForm->handleRequest($request);
 
-            //suppression d'une sortie avant publication
             if ($tripForm->isSubmitted() && $tripForm->isValid()) {
 
                 //On conditionne la valeur de State en fonction du bouton qui a été cliqué
@@ -117,7 +112,6 @@ class CreateTripController extends AbstractController
                     $trip->setState($state);
                     $tripRepository->add($trip, true);
                     $this->addFlash('success', 'Sortie enregistrée');
-
                 }
 
                 if ($tripForm->get('publier')->isClicked()) {
@@ -126,10 +120,9 @@ class CreateTripController extends AbstractController
                     $trip->setState($state);
                     $tripRepository->add($trip, true);
                     $this->addFlash('success', 'Sortie publiée');
-
-
                 }
 
+                //suppression d'une sortie avant publication
                 if ($tripForm->get('supprimer')->isClicked()) {
 
                     $tripRepository->remove($trip, true);
@@ -139,11 +132,9 @@ class CreateTripController extends AbstractController
                 }
 
                 if ($tripForm->get('annuler')->isClicked()) {
-
-
                     return $this->redirectToRoute('app_cancel_trip', ['id' => $trip->getId()]);
-
                 }
+
                 return $this->redirectToRoute("filter");
             }
 
@@ -151,7 +142,6 @@ class CreateTripController extends AbstractController
                 'trip' => $trip,
                 'createTrip' => $tripForm->createView()
             ]);
-
         }
 
 
