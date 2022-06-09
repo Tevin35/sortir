@@ -13,7 +13,6 @@ use Doctrine\ORM\EntityManagerInterface;
 class UpdateState
 {
 
-
     private EntityManagerInterface $em;
     private StateRepository $stateRepository;
     private TripRepository $tripRepository;
@@ -92,9 +91,13 @@ class UpdateState
     public function published($id):void
     {
         $trip = $this->tripRepository->find($id);
+
+
         $state = $this->stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->setState($state);
         $this->tripRepository->add($trip, true);
 
     }
+
+
 }
