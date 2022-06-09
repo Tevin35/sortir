@@ -3,11 +3,12 @@
 namespace App\Service;
 
 
-use App\Entity\Trip;
+
 use App\Repository\StateRepository;
 use App\Repository\TripRepository;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\Event\LifecycleEventArgs;
+
 
 class UpdateState
 {
@@ -25,27 +26,24 @@ class UpdateState
     }
 
 
-    public function update()
+    public function update():void
     {
         $trips = $this->tripRepository->findAll();
-
-        dump($trips);
 
         foreach ($trips as $entity) {
 
             //Date time du jour
-            $dateNow = new \DateTime();
+            $dateNow = new DateTime();
             //Date de cloture
             $dateOfFenced = clone $entity->getDateLimitRegistration();
             //Date, heure et minutes de la sortie
             $dateOfTrip = clone $entity->getDateStartHour();
 
-
-
             $endOfTrip = clone $dateOfTrip;
-            $endOfTrip->modify($entity->getDuration(). ' minutes');
+            $endOfTrip->modify($entity->getDuration() . ' minutes');
 
-            $archiveOfTrip = clone $dateOfTrip->modify('1 month');
+            $archiveOfTrip = clone $dateOfTrip;
+            $archiveOfTrip->modify('1 month');
 
 
             if (($dateNow >= $archiveOfTrip) && ($entity->getState()->getStateCode() == 'CLOS' OR $entity->getState()->getStateCode() == 'CANC')){
@@ -58,24 +56,26 @@ class UpdateState
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'CANC']);
                 $entity->setState($state);
                 $this->em->flush();
+
             }
 
             elseif(($dateNow >= $endOfTrip) && ($entity->getState()->getStateCode() == 'PROG')){
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'CLOS']);
                 $entity->setState($state);
                 $this->em->flush();
+
             }
 
             elseif (($dateNow >= $dateOfTrip) && ($entity->getState()->getStateCode() == 'FENC')) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'PROG']);
                 $entity->setState($state);
                 $this->em->flush();
-            }
 
-            elseif (($dateNow >= $dateOfFenced ) && ($dateNow < $dateOfTrip)  && ($entity->getState()->getStateCode() === 'OPEN')) {
+            } elseif (($dateNow >= $dateOfFenced) && ($dateNow < $dateOfTrip) && ($entity->getState()->getStateCode() == 'OPEN')) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'FENC']);
                 $entity->setState($state);
                 $this->em->flush();
+
             } elseif (($dateNow < $dateOfFenced) && ($entity->getState()->getStateCode() != 'OPEN' && $entity->getState()->getStateCode() != 'CREA')) {
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'OPEN']);
                 $entity->setState($state);
@@ -86,20 +86,16 @@ class UpdateState
         }
 
 
-
-
-
     }
 
-    public function published($id){
+    public function published($id):void
+    {
         $trip = $this->tripRepository->find($id);
         $state = $this->stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->setState($state);
         $this->tripRepository->add($trip, true);
 
     }
-
-
 
 
 }
