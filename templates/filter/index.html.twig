@@ -81,8 +81,8 @@
 
                 <tr>
                     <td>{{ trip.name }}</td>
-                    <td>{{ trip.dateStartHour|date('Y-m-d H:i') }}</td>
-                    <td>{{ trip.dateLimitRegistration|date('Y-m-d') }}</td>
+                    <td>{{ trip.dateStartHour|date('d-m-Y H:i') }}</td>
+                    <td>{{ trip.dateLimitRegistration|date('d-m-Y ') }}</td>
                     <td> {{ trip.registeredParticipants|length }}/{{ trip.nbMaxRegistration }}</td>
                     <td>{{ trip.state.worded }}</td>
 
@@ -93,10 +93,10 @@
 
                     <td>{% if app.user is same as(trip.owner) and trip.state.stateCode is same as('CREA') %}
                             <p><a href="{{ path('app_update_trip',{'id':trip.id}) }}">Modifier</a> - <a
-                                        href="{{ path('app_display_trip',{'id':trip.id}) }}">Publier</a></p>
+                                        href="{{ path('app_published_trip',{'id':trip.id}) }}">Publier</a></p>
 
                         {% elseif app.user is same as(trip.owner) and trip.state.stateCode is same as('OPEN') %}
-                            <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a> - Annuler</p>
+                            <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a> - <a href="{{ path('app_cancel_trip',{'id':trip.id}) }}" type="submit">Annuler</a></p>
 
                         {% elseif  trip.dateStartHour|date('Y-m-d') is same as(trip.dateLimitRegistration|date('Y-m-d')) %}
                             <p><a href="{{ path('app_display_trip',{'id':trip.id}) }}">Afficher</a></p>
@@ -120,7 +120,6 @@
                         {% endif %}
 
                     </td>
-
 
                 </tr>
             {% endif %}

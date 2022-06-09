@@ -21,7 +21,7 @@ class CancelTripType extends AbstractType
         $builder
 
             ->add('cancelMotif', TextareaType::class,[
-                'mapped'=>false,
+                'mapped'=>true,
                 'label' => "Motif d'annulation"
 
             ])
