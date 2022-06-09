@@ -12,6 +12,7 @@ use Doctrine\Persistence\Event\LifecycleEventArgs;
 class UpdateState
 {
 
+
     private EntityManagerInterface $em;
     private StateRepository $stateRepository;
     private TripRepository $tripRepository;
@@ -81,6 +82,4 @@ class UpdateState
 
         }
     }
-
-
 }

@@ -8,32 +8,56 @@
     {% block nav %}
         Date du jour : {{ "now"|date("d/m/Y") }}
         <br>
-        Participant : {{ app.user.firstName }} {{app.user.lastName|first}}.
+        Participant : {{ app.user.firstName }} {{ app.user.lastName|first }}.
     {% endblock %}
-    <h2>Filtrer les sorties</h2>
-
-    {{ form_start(filterForm) }}
-
-    {{ form_row(filterForm.campus) }}
-    {{ form_row(filterForm.search) }}
-    {{ form_row(filterForm.startingDate) }}
-    {{ form_row(filterForm.endingDate) }}
-
-    {{ form_widget(filterForm.ownerTrip) }}
-    {{ form_label(filterForm.ownerTrip) }}
-
-    {{ form_widget(filterForm.registerTrip) }}
-    {{ form_label(filterForm.registerTrip) }}
 
 
-    {{ form_widget(filterForm.unsuscribeTrip) }}
-    {{ form_label(filterForm.unsuscribeTrip) }}
+    <div class="filterContainer">
 
-    {{ form_widget(filterForm.pastTrip) }}
-    {{ form_label(filterForm.pastTrip) }}
+        <div>
 
-    <button type="submit" name="search" class="search">Rechercher</button>
-    {{ form_end(filterForm) }}
+            <h2>Filtrer les sorties</h2>
+
+            {{ form_start(filterForm) }}
+
+            {{ form_row(filterForm.campus) }}
+            {{ form_row(filterForm.search) }}
+            {{ form_row(filterForm.startingDate) }}
+            {{ form_row(filterForm.endingDate) }}
+
+        </div>
+
+        <div class="filterBox">
+
+            {{ form_widget(filterForm.ownerTrip) }}
+            {{ form_label(filterForm.ownerTrip) }}
+
+            {{ form_widget(filterForm.registerTrip) }}
+            {{ form_label(filterForm.registerTrip) }}
+
+
+            {{ form_widget(filterForm.unsuscribeTrip) }}
+            {{ form_label(filterForm.unsuscribeTrip) }}
+
+            {{ form_widget(filterForm.pastTrip) }}
+            {{ form_label(filterForm.pastTrip) }}
+
+        </div>
+
+        <div>
+
+            <button type="submit" name="search" class="search">Rechercher</button>
+            {{ form_end(filterForm) }}
+
+
+
+        </div>
+
+
+
+    </div>
+
+
 
 
 
@@ -104,7 +128,7 @@
         </tbody>
     </table>
 
-    <a href="{{path('app_create_trip')}}">
+    <a href="{{ path('app_create_trip') }}">
 
         <button type="button">Créer une sortie</button>
 
