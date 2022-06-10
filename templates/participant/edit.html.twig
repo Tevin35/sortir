@@ -21,6 +21,7 @@
     {{ include('participant/_delete_form.html.twig') }}
     {% endif %}
 #}
+    {% if is_granted('ROLE_ADMIN') %}
     <button><a href="{{ path('app_participant_index') }}">Retour à la liste des participants</a></button>
-
+    {% endif %}
 {% endblock %}
