@@ -85,7 +85,7 @@
                     <td>{{ trip.state.worded }}</td>
 
                     {#                app.user récupère l'utilisateur courant #}
-                    <td>{% if app.user in trip.registeredParticipants %}
+                    <td>{%if (app.user in trip.registeredParticipants) %}
                             X{% endif %}</td>
                     <td>{{ trip.owner.pseudo }}</td>
 

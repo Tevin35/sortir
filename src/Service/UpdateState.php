@@ -12,11 +12,9 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class UpdateState
 {
-
     private EntityManagerInterface $em;
     private StateRepository $stateRepository;
     private TripRepository $tripRepository;
-
 
     public function __construct(EntityManagerInterface $em, StateRepository $stateRepository, TripRepository $tripRepository)
     {
@@ -25,26 +23,24 @@ class UpdateState
         $this->tripRepository = $tripRepository;
     }
 
-
     public function update():void
     {
         $trips = $this->tripRepository->findAll();
 
         foreach ($trips as $entity) {
 
-            //Date time du jour
+            //Datetime du jour
             $dateNow = new DateTime();
             //Date de cloture
             $dateOfFenced = clone $entity->getDateLimitRegistration();
-            //Date, heure et minutes de la sortie
+            //Date de la sortie
             $dateOfTrip = clone $entity->getDateStartHour();
-
+            //Date de fin de la sortie modifier via un clone du début de la sortie
             $endOfTrip = clone $dateOfTrip;
             $endOfTrip->modify($entity->getDuration() . ' minutes');
-
+            //Date d'archivage/historisation de la sortie
             $archiveOfTrip = clone $dateOfTrip;
             $archiveOfTrip->modify('1 month');
-
 
             if (($dateNow >= $archiveOfTrip) && ($entity->getState()->getStateCode() == 'CLOS' OR $entity->getState()->getStateCode() == 'CANC')){
                 $state = $this->stateRepository->findOneBy(['stateCode' => 'HIST']);
@@ -53,7 +49,8 @@ class UpdateState
             }
 
             elseif($entity->getState()->getStateCode() == 'CANC'){
-                $state = $this->stateRepository->findOneBy(['stateCode' => 'CANC']);
+//              $state = $this->stateRepository->findOneBy(['stateCode' => 'CANC']);
+                $state = $entity->getState();
                 $entity->setState($state);
                 $this->em->flush();
 

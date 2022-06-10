@@ -11,6 +11,7 @@ use App\Form\Model\SearchData;
 use App\Repository\StateRepository;
 use App\Repository\TripRepository;
 use App\Service\UpdateState;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,10 +58,12 @@ class CreateTripController extends AbstractController
             //hydratation des attributs qui ne sont pas renseignés dans le formulaire
             $trip
                 ->setOwner($this->getUser())
+                ->addRegisteredParticipant($this->getUser())
                 //->setCampus($this->getUser()->getCampus())
                 ->setState($state);
 
             //envoie en BDD
+
             $tripRepository->add($trip, true);
             $this->addFlash("success", "Sortie Ajoutée");
             return $this->redirectToRoute("filter");
@@ -105,8 +108,16 @@ class CreateTripController extends AbstractController
                 if ($tripForm->get('enregistrer')->isClicked()) {
 
                     //hydratation de la variable state avec un select qui renvoi tous les statecode IS CREA
+
                     $state = $stateRepository->findOneBy(['stateCode' => 'CREA']);
+
+                    $user = $this->getUser();
+                    $trip->addRegisteredParticipant($user);
+
                     $trip->setState($state);
+
+                    $tripRepository->persist($trip);
+
                     $tripRepository->add($trip, true);
                     $this->addFlash('success', 'Sortie enregistrée');
                 }
@@ -145,7 +156,7 @@ class CreateTripController extends AbstractController
     //////////////////////////////////////////// FLO - BOUTON PUBLIER PAGE D'ACCUEIL ///////////////////////////////////////////////////
 
     #[Route('/published/trip/{id}', name: 'app_published_trip')]
-    public function published($id, TripRepository $tripRepository, Request $request, UpdateState $published): Response
+    public function published($id, TripRepository $tripRepository, Request $request, UpdateState $published, EntityManagerInterface $em): Response
     {
 
         /**
@@ -168,8 +179,9 @@ class CreateTripController extends AbstractController
         }
 
         $published->published($id);
-
-
+        $trip->addRegisteredParticipant($user);
+        $em->persist($trip);
+        $em->flush();
         //Pas besoin de getUser ici car on le place dans le constructeur du repository comme dans les fixtures au final
         //On sera en revanche obligé de déclarer une variable avant.
         $this->addFlash('success', 'Sortie publiée');

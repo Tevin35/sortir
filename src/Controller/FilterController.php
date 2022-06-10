@@ -75,12 +75,6 @@ class FilterController extends AbstractController
         }
 
         $user = $this->getUser();
-
-        if ($user != $trip->getOwner()) {
-            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier les données correspondant à un autre utilisateur, jeune gredin ! ');
-        }
-
-
         $trip->addRegisteredParticipant($user);
         $state = $trip->getState();
 
@@ -115,9 +109,6 @@ class FilterController extends AbstractController
 
         $user = $this->getUser();
 
-        if ($user != $trip->getOwner()) {
-            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier les données correspondant à un autre utilisateur, jeune gredin ! ');
-        }
 
         //$state = $stateRepository->findOneBy(['stateCode' => 'OPEN']);
         $trip->removeRegisteredParticipant($user);

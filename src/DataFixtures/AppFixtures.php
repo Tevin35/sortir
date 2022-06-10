@@ -17,7 +17,6 @@ use Symfony\Component\Validator\Constraints\Length;
 
 class AppFixtures extends Fixture
 {
-
     private $encoder;
     private Generator $faker;
     private ObjectManager $manager;
@@ -30,9 +29,7 @@ class AppFixtures extends Fixture
         'PROG' => 'en cours',
         'CLOS' => 'terminée',
         'HIST' => 'historisée',
-        'CANC' => 'annulée'
-    ];
-
+        'CANC' => 'annulée'];
 
     public function __construct(UserPasswordHasherInterface $encoder)
     {
@@ -40,16 +37,12 @@ class AppFixtures extends Fixture
         $this->faker = Factory::create('fr_FR');
     }
 
-
     public function load(ObjectManager $manager): void
     {
-
         $this->manager = $manager;
-
         $this->addCampus();
         $this->addParticipant();
         $this->addState();
-
         $this->loadCity($manager);
         $this->loadPlace($manager);
         $this->addTrip();
@@ -113,7 +106,6 @@ class AppFixtures extends Fixture
             $participant = new Participant();
 
             {
-
                 $campus = $this->manager->getRepository(Campus::class)->findAll();
 
                 $participant
@@ -128,7 +120,6 @@ class AppFixtures extends Fixture
                 $password = $this->encoder->hashPassword($participant, 'password');
                 $participant->setPassword($password);
                 $this->manager->persist($participant);
-
             }
         }
 
